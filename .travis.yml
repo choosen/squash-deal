@@ -4,9 +4,12 @@ rvm:
 cache: bundler
 bundler_args: --jobs=2
 script:
-  - bundle exec rake db:create
+  - psql -c 'create database squashapp_test;' -U postgres
   - bundle exec rake spec
 services:
   - postgresql
 addons:
-  postgresql: "9.6.1"
+  postgresql: "9.6"
+group: stable
+dist: trusty
+os: linux
