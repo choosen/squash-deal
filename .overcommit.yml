@@ -1,0 +1,87 @@
+PreCommit:
+  BerksfileCheck:
+    enabled: true
+
+  BundleCheck:
+    enabled: true
+
+  CoffeeLint:
+    enabled: true
+
+  CssLint:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  EsLint:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  HamlLint:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  HardTabs:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  ImageOptim:
+    enabled: true
+
+  JavaCheckstyle:
+    enabled: true
+
+  Jscs:
+    enabled: true
+
+  JsHint:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  JsonSyntax:
+    enabled: true
+
+  LocalPathsInGemfile:
+    enabled: true
+
+  PryBinding:
+    enabled: true
+
+  RailsSchemaUpToDate:
+    enabled: true
+
+  RuboCop: &rubocop
+    enabled: true
+
+  # overcommit used 'Rubocop' hook name before 0.25.0 version
+  Rubocop:
+    <<: *rubocop
+
+  Scalastyle:
+    enabled: true
+
+  ScssLint:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  ShellCheck:
+    enabled: true
+
+  TrailingWhitespace:
+    enabled: true
+    exclude:
+      - vendor/assets/**/*
+
+  TravisLint:
+    enabled: true
+
+  XmlLint:
+    enabled: true
+
+  YamlSyntax:
+    enabled: true
