@@ -4,7 +4,7 @@ rvm:
 cache: bundler
 bundler_args: --jobs=2
 script:
-  - bundle exec rake db:setup
+  - bundle exec rake db:create
   - bundle exec rake spec
 services:
   - postgresql
