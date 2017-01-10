@@ -35,6 +35,7 @@ gem 'bootstrap-sass'
 gem 'devise'
 gem 'haml-rails'
 gem 'rails_12factor', group: :production
+gem 'sidekiq'
 gem 'simple_form'
 
 # Use Capistrano for deployment
