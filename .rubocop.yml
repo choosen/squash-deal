@@ -15,6 +15,9 @@ AllCops:
 MethodCalledOnDoEndBlock:
   Enabled: true
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Documentation:
   Exclude:
     - app/api/**/*
