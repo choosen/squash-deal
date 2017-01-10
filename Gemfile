@@ -34,6 +34,7 @@ gem 'jbuilder', '~> 2.5'
 
 gem 'bootstrap-sass'
 gem 'devise'
+gem 'devise_invitable'
 gem 'haml-rails'
 gem 'rails_12factor', group: :production
 gem 'sidekiq'
