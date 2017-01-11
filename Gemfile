@@ -36,6 +36,7 @@ gem 'bootstrap-sass'
 gem 'devise'
 gem 'devise_invitable'
 gem 'haml-rails'
+gem 'rails-i18n'
 gem 'rails_12factor', group: :production
 gem 'sidekiq'
 gem 'simple_form'

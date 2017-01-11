@@ -1,0 +1,31 @@
+pl:
+  devise:
+    failure:
+      invited: "Wysłano do Ciebie email z zaproszeniem, zaakceptuj je, aby kontunuować."
+    invitations:
+      send_instructions: "Email z zaproszeniem został wysłąny do %{email}."
+      invitation_token_invalid: "Token zaproszenia jest błędny!"
+      updated: "Twoje hasło zostało zapisane. Zostałeś automatycznie zalogowany."
+      updated_not_active: "Twoje hasło zostało zapisane."
+      no_invitations_remaining: "No invitations remaining"
+      invitation_removed: "Twoje zaproszenie zostało usunięte"
+      new:
+        header: "Wysyłanie zaproszenia"
+        submit_button: "Wyślij zaproszenie"
+      edit:
+        header: "Ustawienie hasła"
+        submit_button: "Zapisz hasło"
+    mailer:
+      invitation_instructions:
+        subject: "Zaproszenie do serwisu SquashApp"
+        hello: "Witaj %{email}"
+        someone_invited_you: "Zostałeś zaproszony do serwisu squashowego %{url}, możesz z niego skorzystać klikając w poniższy link."
+        accept: "Przyjmij zaproszenie"
+        accept_until: "To zaproszenie będzie aktywne do %{due_date}."
+        ignore: "Jeśli nie chcesz dołączyć do serwisu zignoruj ten email<br />\nTwoje konto nie będzie stworzone dopóki nie ustawisz hasła poprzez powyższy link."
+  time:
+    formats:
+      devise:
+        mailer:
+          invitation_instructions:
+            accept_until_format: "%B %d, %Y %I:%M %p"
