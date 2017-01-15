@@ -23,6 +23,7 @@ pl:
         accept: "Przyjmij zaproszenie"
         accept_until: "To zaproszenie będzie aktywne do %{due_date}."
         ignore: "Jeśli nie chcesz dołączyć do serwisu zignoruj ten email<br />\nTwoje konto nie będzie stworzone dopóki nie ustawisz hasła poprzez powyższy link."
+        decline: "Zrezygnuj z zaproszenia"
   time:
     formats:
       devise:

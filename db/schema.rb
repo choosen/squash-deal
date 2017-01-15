@@ -10,10 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170110173159) do
+ActiveRecord::Schema.define(version: 20170111163537) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "trainings", force: :cascade do |t|
+    t.datetime "date",                               null: false
+    t.decimal  "price",      precision: 8, scale: 2
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
+  end
 
   create_table "users", force: :cascade do |t|
     t.string   "email",                  default: "", null: false
@@ -46,6 +53,17 @@ ActiveRecord::Schema.define(version: 20170110173159) do
     t.index ["invitations_count"], name: "index_users_on_invitations_count", using: :btree
     t.index ["invited_by_id"], name: "index_users_on_invited_by_id", using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "users_trainings", id: false, force: :cascade do |t|
+    t.integer  "user_id",     null: false
+    t.integer  "training_id", null: false
+    t.boolean  "attended"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["training_id"], name: "index_users_trainings_on_training_id", using: :btree
+    t.index ["user_id", "training_id"], name: "index_users_trainings_on_user_id_and_training_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_users_trainings_on_user_id", using: :btree
   end
 
 end
