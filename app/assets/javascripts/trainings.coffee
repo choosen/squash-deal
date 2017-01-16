@@ -4,7 +4,7 @@
 
 $(document).ready ->
   cd = $(".calendar").attr('id')
-  if (cd.length != 0)
+  if (cd != undefined)
     $(".calendar").fullCalendar(
       events: '/users/' + cd.split("_")[1] + '/trainings.json'
     )
