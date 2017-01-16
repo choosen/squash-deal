@@ -1,0 +1,13 @@
+%h1 Training info
+.row
+  .col-md-6.col-md-offset-1
+    %p
+      %b Date:
+      = @training.date
+    %p
+      %b Price:
+      = @training.price
+
+    = link_to 'Edit', edit_training_path(@training)
+    \|
+    = link_to 'Back', trainings_path

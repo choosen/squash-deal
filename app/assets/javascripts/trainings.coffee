@@ -3,6 +3,12 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).ready ->
-  $(".calendar").fullCalendar(
-    events: '/trainings.json'
-)
+  cd = $(".calendar").attr('id')
+  if (cd.length != 0)
+    $(".calendar").fullCalendar(
+      events: '/users/' + cd.split("_")[1] + '/trainings.json'
+    )
+  else
+    $(".calendar").fullCalendar(
+      events: '/trainings.json'
+    )

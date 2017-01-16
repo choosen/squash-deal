@@ -1,2 +1,17 @@
-%h1 Users#index
-%p Find me in app/views/users/index.html.haml
+%h1 Players
+.row
+  .col-md-6.col-md-offset-1
+    = link_to 'Invite new user', new_user_invitation_path
+    %br
+    %br
+    %table
+      %thead
+        %tr
+          %th E-mail
+          %th # of trainings
+
+      %tbody
+        - @users.each do |user|
+          %tr
+            %td= link_to user.email, user
+            %td= user.trainings_count

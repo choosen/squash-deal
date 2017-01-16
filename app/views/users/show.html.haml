@@ -1,2 +1,7 @@
-%h1 Users#show
-%p Find me in app/views/users/show.html.haml
+%h1= @user.email
+.row
+  .col-md-6.col-md-offset-1
+    .calendar{ id: "user_#{@user.id}" }
+    = link_to 'Edit', edit_user_path(@user)
+    \|
+    = link_to 'Back', users_path
