@@ -2,7 +2,8 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-$(document).ready ->
+$(document).on 'turbolinks:load', ->
+  return unless $(".calendar").length > 0
   cd = $(".calendar").attr('id')
   if (cd != undefined)
     $(".calendar").fullCalendar(
