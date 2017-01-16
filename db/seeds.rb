@@ -1,7 +1,19 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+def add_user(email, password)
+  @user = User.invite!(:email => email) do |u|
+    u.skip_invitation = true
+  end
+  token = Devise::VERSION >= "3.1.0" ? @user.instance_variable_get(:@raw_invitation_token) : @user.invitation_token
+  User.accept_invitation!(:invitation_token => token, :password => password, :password_confirmation => password)
+
+  puts "Created User #{email} with password #{password}"
+  @user
+end
+
+admin = add_user('admin@sample.com', "123456")
+admin.admin = true
+admin.save
+
+player = add_user('player@sample.com', '123456')
+
+training = Training.create(date: DateTime.now, price: 120.00)
+training.users << player
