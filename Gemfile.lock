@@ -76,8 +76,6 @@ GEM
       railties (>= 4.1.0, < 5.1)
       responders
       warden (~> 1.2.3)
-    devise-async (0.7.0)
-      devise (>= 2.2)
     devise_invitable (1.7.0)
       actionmailer (>= 4.0.0)
       devise (>= 4.0.0)
@@ -297,7 +295,6 @@ DEPENDENCIES
   composite_primary_keys
   database_cleaner
   devise
-  devise-async
   devise_invitable
   factory_girl_rails
   ffaker
