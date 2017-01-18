@@ -1,6 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe UsersController, type: :controller do
+  login_user
   let(:user) { FactoryGirl.create(:user) }
 
   describe 'GET #show' do

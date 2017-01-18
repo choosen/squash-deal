@@ -3,6 +3,7 @@ FactoryGirl.define do
   factory :user do
     sequence(:email) { |n| "tester#{n}@wp.pl" }
     password 'password123'
+    confirmed_at Date.current
 
     trait :admin do
       email 'admin@example.com'
