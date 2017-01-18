@@ -11,7 +11,7 @@ class Users::TrainingsController < ApplicationController
   def create
     users_training = UsersTraining.new(users_training_params)
     if users_training.save
-      UserMailer.training_invitation(users_training).deliver_now
+      UserMailer.training_invitation(users_training).deliver_later
       flash[:success] = 'Invitation created'
       redirect_to training_path(users_training.training.id)
     else
