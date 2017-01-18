@@ -1,0 +1,7 @@
+%h1 Hello #{@user.email},
+%p You are invited to take a part in squash training at #{@training.date}
+%p= link_to 'Confirm play', @accept_url
+%br
+%p
+  Let your trainer know, if you can't attende:
+  = link_to 'Dismiss invitation', @decline_url

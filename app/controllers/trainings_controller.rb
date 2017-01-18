@@ -1,5 +1,8 @@
 class TrainingsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_training, only: [:show, :edit, :update, :destroy]
+  before_action :set_user_training, only: [:invitation_accept,
+                                           :invitation_remove]
 
   # GET /trainings
   # GET /trainings.json
@@ -9,7 +12,9 @@ class TrainingsController < ApplicationController
 
   # GET /trainings/1
   # GET /trainings/1.json
-  def show; end
+  def show
+    @users = @training.users
+  end
 
   # GET /trainings/new
   def new
@@ -61,6 +66,27 @@ class TrainingsController < ApplicationController
     end
   end
 
+  def invite
+    @training = Training.find(params[:training_id])
+    @users_training = UsersTraining.new
+  end
+
+  def invitation_accept
+    if @users_training.update(accepted_at: DateTime.current)
+      flash[:success] = 'Invitation accepted'
+    else
+      flash[:error] = 'Invitation already accepted'
+    end
+    redirect_to root_path
+  end
+
+  def invitation_remove
+    if @users_training.destroy
+      flash[:success] = 'Invitation was successfully declined'
+    end
+    redirect_to root_path
+  end
+
   private
 
   def render_json_errors
@@ -69,6 +95,14 @@ class TrainingsController < ApplicationController
 
   def set_training
     @training = Training.find(params[:id])
+  end
+
+  def set_user_training
+    @users_training = UsersTraining.find_by(user: current_user,
+                                            training_id: params[:training_id])
+    return if @users_training
+    flash[:error] = 'Invitation not found'
+    redirect_to root_path
   end
 
   def training_params

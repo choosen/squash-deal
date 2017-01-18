@@ -1,13 +1,23 @@
 %h1 Training info
 .row
-  .col-md-6.col-md-offset-1
+  .col-md-4.col-md-offset-1
     %p
       %b Date:
       = @training.date
     %p
       %b Price:
       = @training.price
+    %br
 
     = link_to 'Edit', edit_training_path(@training)
     \|
     = link_to 'Back', trainings_path
+
+  .col-md-4
+    = link_to 'Invite user to training', training_invite_path(@training)
+    %h2 Invited/Accepted Users
+    %table
+      %thead
+        %tr
+          %th E-mail
+      = render @users
