@@ -9,11 +9,11 @@ def add_user(email, password)
   @user
 end
 
-admin = add_user('admin@sample.com', "123456")
+admin = add_user('admin@sample.com', "12345678")
 admin.admin = true
 admin.save
 
-player = add_user('player@sample.com', '123456')
+player = add_user('player@sample.com', '12345678')
 
 training = Training.create(date: DateTime.now, price: 120.00)
 training.users << player
