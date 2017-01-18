@@ -7,7 +7,7 @@ class TrainingsController < ApplicationController
   # GET /trainings
   # GET /trainings.json
   def index
-    @trainings = Training.all
+    @trainings = Training.date_between(params[:start], params[:end])
   end
 
   # GET /trainings/1
@@ -73,7 +73,7 @@ class TrainingsController < ApplicationController
 
   def invitation_accept
     if @users_training.update(accepted_at: DateTime.current)
-      flash[:success] = 'Invitation accepted'
+      flash[:success] = 'Invitation accepted or it\'s to late'
     else
       flash[:error] = 'Invitation already accepted'
     end

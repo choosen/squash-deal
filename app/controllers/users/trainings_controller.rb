@@ -2,10 +2,9 @@ class Users::TrainingsController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    params.each do |key, value|
-      Rails.logger.warn "Param #{key}: #{value}"
-    end
-    @trainings = User.find(params[:user_id]).trainings
+    @user_trainings = UsersTraining.includes(:training).where(
+      user_id: params[:user_id]
+    )
   end
 
   def create
