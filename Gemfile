@@ -35,13 +35,16 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap-sass'
+gem 'composite_primary_keys'
 gem 'devise'
+gem 'devise-async'
 gem 'devise_invitable'
 gem 'fullcalendar-rails'
 gem 'haml-rails'
 gem 'momentjs-rails'
 gem 'rails-i18n'
 gem 'rails_12factor', group: :production
+gem 'redis'
 gem 'sidekiq'
 gem 'simple_form'
 
@@ -62,6 +65,7 @@ end
 
 group :development do
   gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'html2haml'
   gem 'letter_opener'
   gem 'listen', '~> 3.0.5'
