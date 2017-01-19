@@ -17,7 +17,7 @@ class UsersTraining < ApplicationRecord
   private
 
   def accepted_at_not_changed
-    return if accepted_at_was.nil?
+    return if accepted_at_was.nil? || accepted_at_was == accepted_at
     errors.add(:accepted_at, 'User can accept invitition only once')
   end
 

@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 
   def update
     if @user.update(user_params)
-      redirect_to @user, notice: 'User was successfully updated.'
+      redirect_to @user, flash: { notice: 'User was successfully updated.' }
     else
       render :edit
     end
@@ -24,7 +24,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   rescue ActiveRecord::RecordNotFound
     logger.error "Attempt to access invalid user #{params[:id]}"
-    redirect_to root_url, notice: 'Invalid user'
+    redirect_to root_url, flash: { notice: 'Invalid user' }
   end
 
   def user_params

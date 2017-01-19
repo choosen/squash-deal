@@ -9,5 +9,6 @@ Rails.application.routes.draw do
     get :invite
     get :invitation_accept
     get :invitation_remove
+    put :close
   end
 end

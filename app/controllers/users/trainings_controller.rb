@@ -19,9 +19,23 @@ class Users::TrainingsController < ApplicationController
     end
   end
 
+  def update
+    users_training = UsersTraining.find([params[:id], params[:user_id]])
+    if users_training.update!(users_training_update_params)
+      training = users_training.training
+      redirect_to training, flash: { success: 'Changed attend state of user' }
+    else
+      redirect_to root_path, flash: { error: 'Error during update' }
+    end
+  end
+
   private
 
   def users_training_params
     params.require(:users_training).permit(:user_id, :training_id)
+  end
+
+  def users_training_update_params
+    params.permit(:attended)
   end
 end

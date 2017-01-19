@@ -8,16 +8,49 @@
       %b Price:
       = @training.price
     %br
-
-    = link_to 'Edit', edit_training_path(@training)
-    \|
-    = link_to 'Back', trainings_path
+    .btn-group
+      = link_to 'Edit', edit_training_path(@training),
+        class: 'btn btn-default'
+      = link_to 'Destroy', @training, method: :delete,
+        class: 'btn btn-default', data: { confirm: 'Are you sure?' }
+      = link_to 'Back', trainings_path, class: 'btn btn-default'
 
   .col-md-4
-    = link_to 'Invite user to training', training_invite_path(@training)
-    %h2 Invited/Accepted Users
-    %table
-      %thead
-        %tr
-          %th E-mail
-      = render @users
+    - if @training.done?
+      - unless @training.finished?
+        - if (@training.price || 0).zero?
+          = link_to 'Set price to training to finish it',
+            edit_training_path(@training)
+        - else
+          = link_to 'Close training and send payment reminders',
+            training_close_path(@training), method: :put,
+            class: "btn btn-default #{'disabled' unless @users_trainings_attended}"
+      %h2 Present players
+      %table.table
+        %thead
+          %tr
+            %th E-mail
+            %th Action
+        %tbody
+          = render partial: 'trainings/users_training',
+            collection: @users_trainings_attended, as: :users_training,
+            locals: { attended: false }
+      %h2 Absences
+      %table.table
+        %thead
+          %tr
+            %th E-mail
+            %th Action
+        %tbody
+          = render partial: 'trainings/users_training',
+            collection: @users_trainings_not_attended, as: :users_training,
+            locals: { attended: true }
+    - else
+      = link_to 'Invite user to training', training_invite_path(@training)
+      %h2 Invited/Accepted players
+      %table.table.table-hover.table-condensed
+        %thead
+          %tr
+            %th E-mail
+        %tbody
+          = render @users || 'There are no users'

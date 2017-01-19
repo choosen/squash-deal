@@ -9,4 +9,10 @@ class UserMailer < ApplicationMailer
     @accept_url = training_invitation_accept_url(@training)
     mail(to: @user.email, subject: 'Squash training invitation')
   end
+
+  def payment_reminder(users_training, training)
+    @user = users_training.user
+    @training = training
+    mail(to: @user.email, subject: 'Squash training payment reminder')
+  end
 end
