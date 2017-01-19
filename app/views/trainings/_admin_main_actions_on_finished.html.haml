@@ -1,0 +1,8 @@
+- unless @training.finished?
+  - if (@training.price || 0).zero?
+    = link_to 'Set price to training to finish it',
+      edit_training_path(@training), class: 'btn btn-default'
+  - else
+    = link_to 'Close training and send payment reminders',
+      training_close_path(@training), method: :put,
+      class: "btn btn-default #{'disabled' unless @users_trainings_attended}"

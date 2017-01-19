@@ -18,4 +18,6 @@ module ApplicationHelper
   def class_string(msg_type)
     "alert #{bootstrap_class_for(msg_type)} fade in"
   end
+
+  delegate :admin?, to: :current_user, prefix: false
 end

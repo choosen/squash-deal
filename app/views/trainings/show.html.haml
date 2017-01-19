@@ -8,23 +8,13 @@
       %b Price:
       = @training.price
     %br
-    .btn-group
-      = link_to 'Edit', edit_training_path(@training),
-        class: 'btn btn-default'
-      = link_to 'Destroy', @training, method: :delete,
-        class: 'btn btn-default', data: { confirm: 'Are you sure?' }
-      = link_to 'Back', trainings_path, class: 'btn btn-default'
+    - if admin?
+      = render 'admin_actions_on_training'
 
   .col-md-4
     - if @training.done?
-      - unless @training.finished?
-        - if (@training.price || 0).zero?
-          = link_to 'Set price to training to finish it',
-            edit_training_path(@training)
-        - else
-          = link_to 'Close training and send payment reminders',
-            training_close_path(@training), method: :put,
-            class: "btn btn-default #{'disabled' unless @users_trainings_attended}"
+      - if admin?
+        = render 'admin_main_actions_on_finished'
       %h2 Present players
       %table.table
         %thead
@@ -46,11 +36,12 @@
             collection: @users_trainings_not_attended, as: :users_training,
             locals: { attended: true }
     - else
-      = link_to 'Invite user to training', training_invite_path(@training)
+      - if admin?
+        = link_to 'Invite user to training', training_invite_path(@training)
       %h2 Invited/Accepted players
       %table.table.table-hover.table-condensed
         %thead
           %tr
             %th E-mail
         %tbody
-          = render @users || 'There are no users'
+          = render @users
