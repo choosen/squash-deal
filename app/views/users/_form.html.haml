@@ -1,5 +1,5 @@
 = simple_form_for @user, html: { class: 'form-class' } do |f|
   = f.input :email
   = f.input :password, hint: false, error_html: { id: 'password_error' }
-  = f.input :password_confirmation, label: false
+  = f.input :password_confirmation
   = f.button :submit
