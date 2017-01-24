@@ -4,10 +4,11 @@
 
 $(document).on 'turbolinks:load', ->
   return unless $(".calendar").length > 0
-  cd = $(".calendar").attr('id')
-  if (cd != undefined)
+  cdID = $(".calendar").attr('id')
+  $(".calendar").html ''
+  if (cdID != undefined)
     $(".calendar").fullCalendar(
-      events: '/users/' + cd.split("_")[1] + '/trainings.json'
+      events: '/users/' + cdID.split("_")[1] + '/trainings.json'
     )
   else
     $(".calendar").fullCalendar(
