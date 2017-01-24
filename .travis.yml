@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 2.3.3
 cache: bundler
-bundler_args: --jobs=2
+bundler_args: --jobs=2 --without production
 script:
   - psql -c 'create database squashapp_test;' -U postgres
   - bundle exec rake db:test:prepare
