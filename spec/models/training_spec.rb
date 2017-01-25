@@ -9,14 +9,9 @@ RSpec.describe Training, type: :model do
 
   it { is_expected.to validate_presence_of :date }
 
-  it 'is invalid with negative price' do
-    training.price = -20.50
-    expect(subject).not_to be_valid
-  end
-
-  it 'is valid with no price' do
-    training.price = nil
-    expect(subject).to be_valid
+  it do
+    is_expected.to validate_numericality_of(:price).is_greater_than(0.0).
+      allow_nil
   end
 
   describe '#price_per_user' do
