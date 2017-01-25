@@ -4,10 +4,10 @@ RSpec.describe Training, type: :model do
   let(:training) { create(:training) }
   subject { training }
 
-  it 'is invalid without a date' do
-    training.date = nil
-    expect(subject).not_to be_valid
-  end
+  it { is_expected.to have_many :users }
+  it { is_expected.to have_many :users_trainings }
+
+  it { is_expected.to validate_presence_of :date }
 
   it 'is invalid with negative price' do
     training.price = -20.50
