@@ -2,6 +2,8 @@ language: ruby
 rvm:
   - 2.3.3
 cache: bundler
+before_install:
+  - gem update --system
 bundler_args: --jobs=2 --without production
 script:
   - psql -c 'create database squashapp_test;' -U postgres
