@@ -39,4 +39,24 @@ RSpec.describe Training, type: :model do
       end
     end
   end
+
+  describe '#done?' do
+    subject { training.done? }
+
+    context 'when date is in future' do
+      let(:training) { create(:training) }
+
+      it 'returns false' do
+        expect(subject).to eq false
+      end
+    end
+
+    context 'when date is in past' do
+      let(:training) { create(:training, date: DateTime.current - 2.days) }
+
+      it 'returns true' do
+        expect(subject).to eq true
+      end
+    end
+  end
 end
