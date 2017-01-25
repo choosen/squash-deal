@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Training, type: :model do
+RSpec.describe Training, type: :model do
   let(:training) { create(:training) }
   subject { training }
 
@@ -30,16 +30,13 @@ describe Training, type: :model do
 
     context 'when there are 3 users_trainings' do
       context 'when 2 of them attended' do
-        let(:training) { create(:training_with_users) }
-        subject { training.price_per_user }
-
-        it 'has 2 users' do
-          expect(training.users.count).to eq 2
+        before(:each) do
+          @training = create(:training_with_users)
+          @training.users_trainings.
+            first(2).each { |ut| ut.update(attended: true) }
         end
 
-        it 'has 2 users' do
-          expect(training.users_trainings.count).to eq 2
-        end
+        subject { @training.price_per_user }
 
         it 'devides price by 2' do
           expect(subject).to eq training.price / 2
