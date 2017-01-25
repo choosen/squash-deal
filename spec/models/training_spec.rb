@@ -14,6 +14,25 @@ RSpec.describe Training, type: :model do
       allow_nil
   end
 
+  describe 'scope date_between' do
+    before(:all) do
+      @begin_d = DateTime.new(2016, 1, 25, 16, 45).utc
+      @scope_trainings_table = [create(:training, date: @begin_d + 2.hours),
+                                create(:training, date: @begin_d + 4.hours)]
+      @out_of_range_training =  create(:training, date: @begin_d - 5.hours)
+    end
+
+    subject { Training.date_between(@begin_d, @begin_d + 1.day) }
+
+    it 'returns only trainings between the date' do
+      expect(subject).to eq @scope_trainings_table
+    end
+
+    it 'returns no training with date out of range' do
+      expect(subject).not_to include @out_of_range_training
+    end
+  end
+
   describe '#price_per_user' do
     context 'when there are no users_trainings' do
       let(:training) { create(:training) }
@@ -25,7 +44,7 @@ RSpec.describe Training, type: :model do
 
     context 'when there are 3 users_trainings' do
       context 'when 2 of them attended' do
-        before(:each) do
+        before(:all) do
           @training = create(:training_with_users)
           @training.users_trainings.
             first(2).each { |ut| ut.update(attended: true) }
