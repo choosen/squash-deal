@@ -28,6 +28,6 @@ class UsersTraining < ApplicationRecord
 
   def created_before_training_date
     return if training.nil? || training.date >= DateTime.current
-    errors.add(:accepted_at, 'You can only invite players for future trainings')
+    errors.add(:base, 'You can only invite players for future trainings')
   end
 end

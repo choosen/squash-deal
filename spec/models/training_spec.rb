@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Training, type: :model do
-  let(:training) { create(:training) }
+  let(:training) { build(:training) }
   subject { training }
 
   it { is_expected.to have_many :users }
@@ -15,7 +15,7 @@ RSpec.describe Training, type: :model do
   end
 
   describe 'scope date_between' do
-    before(:all) do
+    before(:each) do
       @begin_d = DateTime.new(2016, 1, 25, 16, 45).utc
       @scope_trainings_table = [create(:training, date: @begin_d + 2.hours),
                                 create(:training, date: @begin_d + 4.hours)]
@@ -35,8 +35,8 @@ RSpec.describe Training, type: :model do
 
   describe '#price_per_user' do
     context 'when there are no users_trainings' do
-      let(:training) { create(:training) }
       subject { training.price_per_user }
+
       it 'returns 0 if there are no users in training' do
         expect(subject).to eq 0
       end
@@ -44,7 +44,7 @@ RSpec.describe Training, type: :model do
 
     context 'when there are 3 users_trainings' do
       context 'when 2 of them attended' do
-        before(:all) do
+        before(:each) do
           @training = create(:training_with_users)
           @training.users_trainings.
             first(2).each { |ut| ut.update(attended: true) }
@@ -63,15 +63,13 @@ RSpec.describe Training, type: :model do
     subject { training.done? }
 
     context 'when date is in future' do
-      let(:training) { create(:training) }
-
       it 'returns false' do
         expect(subject).to eq false
       end
     end
 
     context 'when date is in past' do
-      let(:training) { create(:training, date: DateTime.current - 2.days) }
+      let(:training) { build(:training, date: DateTime.current - 2.days) }
 
       it 'returns true' do
         expect(subject).to eq true
