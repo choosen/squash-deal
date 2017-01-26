@@ -7,6 +7,9 @@ RSpec.describe UsersTraining, type: :model do
   it { is_expected.to belong_to :user }
   it { is_expected.to belong_to :training }
 
+  it { is_expected.to validate_presence_of :user }
+  it { is_expected.to validate_presence_of :training }
+
   subject { users_training }
 
   describe 'custom validations:' do
