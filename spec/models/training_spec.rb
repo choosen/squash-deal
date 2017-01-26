@@ -16,7 +16,7 @@ RSpec.describe Training, type: :model do
 
   describe 'scope date_between' do
     before(:each) do
-      @begin_d = DateTime.new(2016, 1, 25, 16, 45).utc
+      @begin_d = DateTime.current
       @scope_trainings_table = [create(:training, date: @begin_d + 2.hours),
                                 create(:training, date: @begin_d + 4.hours)]
       @out_of_range_training =  create(:training, date: @begin_d - 5.hours)
