@@ -13,6 +13,8 @@ class UserMailer < ApplicationMailer
   def payment_reminder(users_training, training)
     @user = users_training.user
     @training = training
+    @training_user_price = training.price_per_user
+    @training_user_price -= 15 if users_training.multisport_used?
     mail(to: @user.email, subject: 'Squash training payment reminder')
   end
 
