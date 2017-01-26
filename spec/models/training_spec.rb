@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Training, type: :model do
   let(:training) { build(:training) }
+  let!(:dt_now) { DateTime.current }
   subject { training }
 
   it { is_expected.to have_many :users }
@@ -16,13 +17,12 @@ RSpec.describe Training, type: :model do
 
   describe 'scope date_between' do
     before(:each) do
-      @begin_d = DateTime.current
-      @scope_trainings_table = [create(:training, date: @begin_d + 2.hours),
-                                create(:training, date: @begin_d + 4.hours)]
-      @out_of_range_training =  create(:training, date: @begin_d - 5.hours)
+      @scope_trainings_table = [create(:training, date: dt_now + 2.hours),
+                                create(:training, date: dt_now + 4.hours)]
+      @out_of_range_training =  create(:training, date: dt_now + 5.days)
     end
 
-    subject { Training.date_between(@begin_d, @begin_d + 1.day) }
+    subject { Training.date_between(dt_now, dt_now + 1.day) }
 
     it 'returns only trainings between the date' do
       expect(subject).to eq @scope_trainings_table
@@ -73,6 +73,21 @@ RSpec.describe Training, type: :model do
 
       it 'returns true' do
         expect(subject).to eq true
+      end
+    end
+  end
+
+  describe 'custom validation:' do
+    describe 'create training' do
+      context 'with date set in the future' do
+        it { is_expected.to be_valid }
+      end
+
+      context 'with date set in the past' do
+        it 'is prohibited' do
+          expect { subject.date = dt_now - 1.day }.to change { subject.valid? }.
+            from(true).to(false)
+        end
       end
     end
   end
