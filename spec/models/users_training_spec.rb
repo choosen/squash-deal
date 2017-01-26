@@ -40,17 +40,13 @@ RSpec.describe UsersTraining, type: :model do
       end
 
       context 'when training end date is in the future' do
-        it 'is valid' do
-          expect(subject.valid?).to eq true
-        end
+        it { is_expected.to be_valid }
       end
     end
 
     describe 'Invite user to training' do
       context 'when training is in the future' do
-        it 'is valid' do
-          expect(subject.valid?).to eq true
-        end
+        it { is_expected.to be_valid }
       end
 
       context 'when training is in the past' do
