@@ -1,5 +1,5 @@
 %h1 Hello #{@user.email},
-%p You are invited to take a part in squash training at #{@training.date}
+%p You are invited to take a part in squash training at #{I18n.l @training.date}
 %p= link_to 'Confirm play', @accept_url
 %br
 %p

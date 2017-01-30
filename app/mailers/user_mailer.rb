@@ -21,6 +21,8 @@ class UserMailer < ApplicationMailer
   def training_reminder(users_training)
     @user = users_training.user
     @training = users_training.training
-    mail(to: @user.email, subject: 'Your Squash training is tomorrow')
+    training_at = I18n.l @training.date, format: :time
+    mail(to: @user.email,
+         subject: "Your Squash training is tomorrow at #{training_at}")
   end
 end
