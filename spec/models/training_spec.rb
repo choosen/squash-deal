@@ -7,8 +7,10 @@ RSpec.describe Training, type: :model do
 
   it { is_expected.to have_many :users }
   it { is_expected.to have_many :users_trainings }
+  it { is_expected.to belong_to :owner }
 
   it { is_expected.to validate_presence_of :date }
+  it { is_expected.to validate_presence_of :owner }
 
   it do
     is_expected.to validate_numericality_of(:price).is_greater_than(0.0).

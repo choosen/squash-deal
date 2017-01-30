@@ -2,6 +2,7 @@ FactoryGirl.define do
   factory :training do
     date DateTime.current + 2.days
     price '120.00'
+    association :owner, factory: :user
 
     factory :training_with_user do
       transient do

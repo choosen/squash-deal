@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170118153220) do
+ActiveRecord::Schema.define(version: 20170130132257) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,8 @@ ActiveRecord::Schema.define(version: 20170118153220) do
     t.datetime "created_at",                                         null: false
     t.datetime "updated_at",                                         null: false
     t.boolean  "finished",                           default: false, null: false
+    t.integer  "owner_id"
+    t.index ["owner_id"], name: "index_trainings_on_owner_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -50,6 +52,8 @@ ActiveRecord::Schema.define(version: 20170118153220) do
     t.integer  "invitations_count",      default: 0
     t.boolean  "admin",                  default: false, null: false
     t.integer  "trainings_count",        default: 0
+    t.string   "name"
+    t.boolean  "multisport",             default: false, null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["invitation_token"], name: "index_users_on_invitation_token", unique: true, using: :btree
@@ -59,15 +63,17 @@ ActiveRecord::Schema.define(version: 20170118153220) do
   end
 
   create_table "users_trainings", id: false, force: :cascade do |t|
-    t.integer  "user_id",                     null: false
-    t.integer  "training_id",                 null: false
-    t.boolean  "attended",    default: false, null: false
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
+    t.integer  "user_id",                         null: false
+    t.integer  "training_id",                     null: false
+    t.boolean  "attended",        default: false, null: false
+    t.datetime "created_at",                      null: false
+    t.datetime "updated_at",                      null: false
     t.datetime "accepted_at"
+    t.boolean  "multisport_used", default: false, null: false
     t.index ["training_id"], name: "index_users_trainings_on_training_id", using: :btree
     t.index ["user_id", "training_id"], name: "index_users_trainings_on_user_id_and_training_id", unique: true, using: :btree
     t.index ["user_id"], name: "index_users_trainings_on_user_id", using: :btree
   end
 
+  add_foreign_key "trainings", "users", column: "owner_id"
 end
