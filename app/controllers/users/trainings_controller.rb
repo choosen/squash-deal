@@ -8,14 +8,14 @@ class Users::TrainingsController < ApplicationController
   end
 
   def create
-    users_training = UsersTraining.new(users_training_params)
+    users_training = UsersTraining.new(users_training_params,
+                                       multisport: current_user.multisport)
     if users_training.save
       UserMailer.training_invitation(users_training).deliver_later
       flash[:success] = 'Invitation created'
       redirect_to training_path(users_training.training.id)
     else
-      flash[:error] = 'Some error occured'
-      redirect_to root_path
+      redirect_to root_path, flash: { error: 'Some error occured' }
     end
   end
 
