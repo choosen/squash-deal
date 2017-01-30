@@ -13,6 +13,6 @@ class User < ApplicationRecord
   end
 
   def display_name
-    name.blank? ? email : name
+    name || email
   end
 end
