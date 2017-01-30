@@ -14,6 +14,12 @@ class UsersTraining < ApplicationRecord
     accepted_at.present?
   end
 
+  def user_price
+    return 0 unless attended?
+    return training.price_per_user unless multisport_used?
+    training.price_per_user - 15
+  end
+
   private
 
   def accepted_at_not_changed

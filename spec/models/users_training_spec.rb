@@ -12,6 +12,51 @@ RSpec.describe UsersTraining, type: :model do
 
   subject { users_training }
 
+  describe '#accepted' do
+    subject { users_training.accepted? }
+    context 'when accepted_at is present' do
+      let(:users_training) { build(:users_training, accepted_at: today) }
+
+      it { is_expected.to eq true }
+    end
+
+    context 'when accepted_at is blank' do
+      it { is_expected.to eq false }
+    end
+  end
+
+  describe '#user_price' do
+    subject { users_training.user_price }
+
+    context 'when user did not attended in training' do
+      it { is_expected.to eq 0 }
+    end
+
+    context 'when user attended in training' do
+      before(:each) do
+        training = create(:training_with_users)
+        training.users_trainings.
+          first(2).each { |ut| ut.update(attended: true) }
+        @user_t_with_multi = training.users_trainings.first
+        @user_t_with_multi.update(multisport_used: true)
+        @user_t_no_paid = training.users_trainings.second
+      end
+
+      context 'and user used multisport' do
+        subject { @user_t_with_multi.user_price }
+
+        it { is_expected.to eq @user_t_with_multi.training.price_per_user - 15 }
+      end
+
+      context "and user haven't got multisport" do
+        subject { @user_t_no_paid.user_price }
+
+        it { is_expected.to eq @user_t_no_paid.training.price_per_user }
+        it { is_expected.to be_positive }
+      end
+    end
+  end
+
   describe 'custom validations:' do
     describe 'change of accepted_at' do
       context 'when accepted_at is set' do
