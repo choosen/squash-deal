@@ -1,6 +1,7 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_training, only: [:show, :edit, :update, :destroy, :close]
+  before_action :set_training, only: [:show, :edit, :update, :destroy,
+                                      :close, :invite]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
@@ -59,7 +60,6 @@ class TrainingsController < ApplicationController
   end
 
   def invite
-    @training = Training.find(params[:training_id])
     @users_training = UsersTraining.new
   end
 
@@ -109,13 +109,15 @@ class TrainingsController < ApplicationController
 
   def set_training
     @training = Training.find(params[:id] || params[:training_id])
+    return if @training
+    redirect_to root_path, flash: { error: 'Training not found' }
   end
 
   def set_user_training
     @users_training = UsersTraining.find_by(user: current_user,
                                             training_id: params[:training_id])
     return if @users_training
-    redirect_to root_path, flash: { notice: 'Invitation not found' }
+    redirect_to root_path, flash: { error: 'Invitation not found' }
   end
 
   def training_params

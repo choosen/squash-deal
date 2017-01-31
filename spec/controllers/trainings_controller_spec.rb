@@ -32,6 +32,7 @@ RSpec.describe TrainingsController, type: :controller do
   describe 'GET #show' do
     it 'assigns the requested training as @training' do
       get :show, params: { id: training.to_param }
+      expect(controller).not_to set_flash[:error]
       expect(response).to have_http_status(:success)
     end
   end
@@ -44,7 +45,7 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'GET #edit' do
-    it 'assigns the requested training as @training' do
+    it 'displays edit training form' do
       get :edit, params: { id: training.to_param }
       expect(response).to have_http_status(:success)
     end
@@ -127,13 +128,57 @@ RSpec.describe TrainingsController, type: :controller do
     subject { delete :destroy, params: { id: training_to_destroy.to_param } }
 
     it 'destroys the requested training' do
-      # expect { subject }.to change(Training, :count).by(-1)
       expect { subject }.to change { Training.count }.by(-1)
     end
 
     it 'redirects to the trainings list' do
       subject
       expect(response).to redirect_to(trainings_url)
+    end
+  end
+
+  describe 'GET #invite' do
+    context 'when params training is ok' do
+      it 'displays invite to training form' do
+        get :invite, params: { training_id: training.to_param }
+        expect(response).to have_http_status(:success)
+      end
+    end
+  end
+
+  # describe 'reactions for invitation:' do
+  #   valid_params = { training_id: training.to_param }
+  #   invalid_params = { training_id: -10 }
+  #
+  #   describe 'GET #invitation_accept' do
+  #     context 'when params are valid' do
+  #       skip('')
+  #     end
+  #
+  #     context 'when params are invalid' do
+  #       skip('')
+  #     end
+  #   end
+  #
+  #   describe 'GET #invitation_remove' do
+  #     context 'when params are valid' do
+  #       skip('#TODO')
+  #     end
+  #
+  #     context 'when params are invalid' do
+  #       skip('#TODO')
+  #     end
+  #   end
+  # end
+  #
+  #
+  describe 'PUT #close' do
+    context 'when params are valid' do
+      skip('#TODO')
+    end
+
+    context 'when params are invalid' do
+      skip('#TODO')
     end
   end
 end
