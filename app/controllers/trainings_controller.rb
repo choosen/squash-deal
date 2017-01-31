@@ -15,8 +15,6 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # GET /trainings/1
-  # GET /trainings/1.json
   def show
     @users = @training.users
     @users_trainings_attended = training_users_trains.where(attended: true)
