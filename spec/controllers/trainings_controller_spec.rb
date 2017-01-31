@@ -5,7 +5,7 @@ RSpec.describe TrainingsController, type: :controller do
   let(:training) { FactoryGirl.create(:training) }
 
   let(:valid_attributes) { { date: DateTime.current + 2.days, price: 212 } }
-  let(:invalid_attr) { { price: -5 }.merge(a: 1) }
+  let(:invalid_attr) { { price: -5, a: 1 } }
 
   describe 'GET #index' do
     context 'html' do
@@ -85,20 +85,18 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      before(:each) do
-        @training = create(:training)
-      end
+      let!(:training) { create(:training) }
       let!(:par) { { date: DateTime.current + 1.day, price: 1890.00 } }
 
-      subject { put :update, params: { id: @training.to_param, training: par } }
+      subject { put :update, params: { id: training.to_param, training: par } }
 
       it 'updates the requested training' do
-        expect { subject }.to change { @training.reload.price }
+        expect { subject }.to change { training.reload.price }
       end
 
       it 'redirects to the training' do
         subject
-        expect(response).to redirect_to(@training)
+        expect(response).to redirect_to(training)
       end
 
       it 'expect flash notice' do
@@ -146,7 +144,7 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'reactions for invitation:' do
     context 'when params are invalid' do
-      let(:invalid_params) { { training_id: training.to_param } }
+      let!(:invalid_params) { { training_id: training.to_param } }
 
       describe 'GET #invitation_accept' do
         subject { get :invitation_accept, params: invalid_params }
@@ -180,14 +178,10 @@ RSpec.describe TrainingsController, type: :controller do
     end
 
     context 'when params are valid: ' do
+      let!(:ut) { create(:users_training, user: controller.current_user) }
+      let!(:valid_params) { { training_id: ut.training.to_param } }
+
       describe 'GET #invitation_accept' do
-        before(:each) do
-          @ut = create(:users_training, attended: true,
-                                        user: controller.current_user)
-        end
-
-        let(:valid_params) { { training_id: @ut.training.to_param } }
-
         subject { get :invitation_accept, params: valid_params }
 
         it 'flashes success' do
@@ -196,14 +190,11 @@ RSpec.describe TrainingsController, type: :controller do
         end
 
         it 'changes accepted_at of UsersTraining' do
-          expect { subject }.to change { @ut.reload.accepted_at }
+          expect { subject }.to change { ut.reload.accepted_at }
         end
       end
 
       describe 'GET #invitation_remove' do
-        let!(:ut) { create(:users_training, user: controller.current_user) }
-        let(:valid_params) { { training_id: ut.training.to_param } }
-
         subject { get :invitation_remove, params: valid_params }
 
         it 'flashes success' do
@@ -219,14 +210,12 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'PUT #close' do
-    before(:each) do
-      @ut = create(:users_training, attended: true)
-    end
+    let!(:ut) { create(:users_training, attended: true) }
 
-    subject { put :close, params: { training_id: @ut.training.to_param } }
+    subject { put :close, params: { training_id: ut.training.to_param } }
 
     it 'updates training.finished' do
-      expect { subject }.to change { @ut.reload.training.finished }.from(false)
+      expect { subject }.to change { ut.reload.training.finished }.from(false)
     end
 
     it 'flashes success' do
@@ -236,7 +225,7 @@ RSpec.describe TrainingsController, type: :controller do
 
     it 'redirects to the training' do
       subject
-      expect(response).to redirect_to @ut.training
+      expect(response).to redirect_to ut.training
     end
   end
 end
