@@ -180,19 +180,14 @@ RSpec.describe TrainingsController, type: :controller do
     end
 
     context 'when params are valid: ' do
-      before(:each) do
-        @training = create(:training)
-        @training.users << controller.current_user
-        @training.users_trainings.each { |ut| ut.update(attended: true) }
-      end
-
-      let(:valid_params) { { training_id: @training.to_param } }
-
       describe 'GET #invitation_accept' do
         before(:each) do
-          @current_u_t = @training.users_trainings.
-                         detect { |t| t.user_id == controller.current_user.id }
+          @ut = create(:users_training, attended: true,
+                                        user: controller.current_user)
         end
+
+        let(:valid_params) { { training_id: @ut.training.to_param } }
+
         subject { get :invitation_accept, params: valid_params }
 
         it 'flashes success' do
@@ -201,11 +196,14 @@ RSpec.describe TrainingsController, type: :controller do
         end
 
         it 'changes accepted_at of UsersTraining' do
-          expect { subject }.to change { @current_u_t.reload.accepted_at }
+          expect { subject }.to change { @ut.reload.accepted_at }
         end
       end
 
       describe 'GET #invitation_remove' do
+        let!(:ut) { create(:users_training, user: controller.current_user) }
+        let(:valid_params) { { training_id: ut.training.to_param } }
+
         subject { get :invitation_remove, params: valid_params }
 
         it 'flashes success' do
@@ -222,15 +220,13 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #close' do
     before(:each) do
-      @training = create(:training)
-      @training.users << controller.current_user
-      @training.users_trainings.each { |ut| ut.update(attended: true) }
+      @ut = create(:users_training, attended: true)
     end
 
-    subject { put :close, params: { training_id: @training.to_param } }
+    subject { put :close, params: { training_id: @ut.training.to_param } }
 
     it 'updates training.finished' do
-      expect { subject }.to change { @training.reload.finished }.from(false)
+      expect { subject }.to change { @ut.reload.training.finished }.from(false)
     end
 
     it 'flashes success' do
@@ -240,7 +236,7 @@ RSpec.describe TrainingsController, type: :controller do
 
     it 'redirects to the training' do
       subject
-      expect(response).to redirect_to @training
+      expect(response).to redirect_to @ut.training
     end
   end
 end
