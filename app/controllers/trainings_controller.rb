@@ -108,7 +108,7 @@ class TrainingsController < ApplicationController
   end
 
   def set_training
-    @training = Training.find(params[:id] || params[:training_id])
+    @training = Training.find_by(id: params[:id] || params[:training_id])
     return if @training
     redirect_to root_path, flash: { error: 'Training not found' }
   end
