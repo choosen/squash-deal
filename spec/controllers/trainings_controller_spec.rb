@@ -145,17 +145,17 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'reactions for invitation:' do
-    describe 'GET #invitation_accept' do
+    context 'when params are invalid' do
       let(:invalid_params) { { training_id: training.to_param } }
 
-      subject { get :invitation_accept, params: invalid_params }
+      describe 'GET #invitation_accept' do
+        subject { get :invitation_accept, params: invalid_params }
 
-      it 'redirects to root' do
-        subject
-        expect(response).to redirect_to(root_path)
-      end
+        it 'redirects to root' do
+          subject
+          expect(response).to redirect_to(root_path)
+        end
 
-      context 'when params are invalid' do
         it 'flashes error' do
           subject
           # current_user can accept its own invitations
@@ -163,17 +163,36 @@ RSpec.describe TrainingsController, type: :controller do
         end
       end
 
-      context 'when params are valid' do
+      describe 'GET #invitation_remove' do
+        subject { get :invitation_remove, params: invalid_params }
+
+        it 'redirects to root' do
+          subject
+          expect(response).to redirect_to(root_path)
+        end
+
+        it 'flashes error' do
+          subject
+          # current_user can accept its own invitations
+          expect(flash[:error]).to eq 'Invitation not found'
+        end
+      end
+    end
+
+    context 'when params are valid: ' do
+      before(:each) do
+        @training = create(:training)
+        @training.users << controller.current_user
+        @training.users_trainings.each { |ut| ut.update(attended: true) }
+      end
+
+      let(:valid_params) { { training_id: @training.to_param } }
+
+      describe 'GET #invitation_accept' do
         before(:each) do
-          @training = create(:training)
-          @training.users << controller.current_user
-          @training.users_trainings.each { |ut| ut.update(attended: true) }
           @current_u_t = @training.users_trainings.
                          detect { |t| t.user_id == controller.current_user.id }
         end
-
-        let(:valid_params) { { training_id: @training.to_param } }
-
         subject { get :invitation_accept, params: valid_params }
 
         it 'flashes success' do
@@ -185,22 +204,25 @@ RSpec.describe TrainingsController, type: :controller do
           expect { subject }.to change { @current_u_t.reload.accepted_at }
         end
       end
-    end
 
-    describe 'GET #invitation_remove' do
-      context 'when params are valid' do
-        skip('#TODO')
-      end
+      describe 'GET #invitation_remove' do
+        subject { get :invitation_remove, params: valid_params }
 
-      context 'when params are invalid' do
-        skip('#TODO')
+        it 'flashes success' do
+          subject
+          expect(controller).to set_flash[:success]
+        end
+
+        it 'changes accepted_at of UsersTraining' do
+          expect { subject }.to change { UsersTraining.count }.by(-1)
+        end
       end
     end
   end
 
   describe 'PUT #close' do
     before(:each) do
-      @training = create(:training_with_user)
+      @training = create(:training)
       @training.users << controller.current_user
       @training.users_trainings.each { |ut| ut.update(attended: true) }
     end
