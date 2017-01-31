@@ -138,11 +138,9 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'GET #invite' do
-    context 'when params training is ok' do
-      it 'displays invite to training form' do
-        get :invite, params: { training_id: training.to_param }
-        expect(response).to have_http_status(:success)
-      end
+    it 'displays invite to training form' do
+      get :invite, params: { training_id: training.to_param }
+      expect(response).to have_http_status(:success)
     end
   end
 
@@ -173,12 +171,26 @@ RSpec.describe TrainingsController, type: :controller do
   #
   #
   describe 'PUT #close' do
-    context 'when params are valid' do
-      skip('#TODO')
+    before(:each) do
+      @training = create(:training_with_user)
+      @training.users << controller.current_user
+      @training.users_trainings.each { |ut| ut.update(attended: true) }
     end
 
-    context 'when params are invalid' do
-      skip('#TODO')
+    subject { put :close, params: { training_id: @training.to_param } }
+
+    it 'updates training.finished' do
+      expect { subject }.to change { @training.reload.finished }.from(false)
+    end
+
+    it 'flashes success' do
+      subject
+      expect(controller).to set_flash[:success]
+    end
+
+    it 'redirects to the training' do
+      subject
+      expect(response).to redirect_to @training
     end
   end
 end
