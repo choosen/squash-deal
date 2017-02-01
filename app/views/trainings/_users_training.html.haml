@@ -4,5 +4,5 @@
   %td
     - if admin?
       = link_to 'Toogle presence',
-          user_training_path(users_training.training_id, users_training.user_id,
+          user_training_path(users_training.user_id, users_training.training_id,
           attended: attended), method: :put, class: 'btn btn-default'

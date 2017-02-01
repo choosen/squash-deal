@@ -20,9 +20,10 @@ class Users::TrainingsController < ApplicationController
   end
 
   def update
-    users_training = UsersTraining.find([params[:id], params[:user_id]])
-    if users_training.update!(users_training_update_params)
-      training = users_training.training
+    ut = UsersTraining.find_by(user_id: params[:user_id],
+                               training_id: params[:id])
+    if check_params(ut) && ut.update(ut_update_params)
+      training = ut.training
       redirect_to training, flash: { success: 'Changed attend state of user' }
     else
       redirect_to root_path, flash: { error: 'Error during update' }
@@ -35,7 +36,11 @@ class Users::TrainingsController < ApplicationController
     params.require(:users_training).permit(:user_id, :training_id)
   end
 
-  def users_training_update_params
+  def check_params(ut)
+    ut && ut.attended != ut_update_params[:attended]
+  end
+
+  def ut_update_params
     params.permit(:attended)
   end
 end
