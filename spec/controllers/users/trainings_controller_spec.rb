@@ -78,7 +78,7 @@ RSpec.describe Users::TrainingsController, type: :controller do
         it 'redirects to the training and flash success' do
           subject
           expect(response).to redirect_to(UsersTraining.last.training)
-          expect(flash[:success]).to eq 'Changed attend state of user'
+          expect(flash[:success]).to eq 'User training info updated'
         end
       end
 
@@ -97,7 +97,7 @@ RSpec.describe Users::TrainingsController, type: :controller do
 
         it 'redirects to the training and flash success' do
           subject
-          expect(flash[:success]).to eq 'Changed attend state of user'
+          expect(flash[:success]).to eq 'User training info updated'
           expect(response).to redirect_to(ut_attended.training)
         end
       end
