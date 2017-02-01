@@ -6,12 +6,15 @@ before_install:
   - gem update --system
 bundler_args: --jobs=2 --without production
 script:
+  - bundle exec sidekiq
+  - sleep 1
   - psql -c 'create database squashapp_test;' -U postgres
   - bundle exec rake db:test:prepare
   - bundle exec rake factory_girl:lint
   - bundle exec rake spec
 services:
   - postgresql
+  - redis-server
 addons:
   postgresql: "9.6"
 group: stable
