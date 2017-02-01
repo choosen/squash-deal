@@ -86,7 +86,9 @@ RSpec.describe Users::TrainingsController, type: :controller do
 
           context "when users_training is marked as #{field}" do
             let(:ut_attended) do
-              FactoryGirl.create(:users_training, field => true)
+              FactoryGirl.create(
+                :users_training, field => true, user: create(:user_with_multi)
+              )
             end
             let(:valid_params) do
               ut_attended.attributes.slice('user_id').symbolize_keys.

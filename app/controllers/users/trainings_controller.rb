@@ -8,13 +8,12 @@ class Users::TrainingsController < ApplicationController
   end
 
   def create
-    if users_training.create(users_training_params)
-      UserMailer.training_invitation(users_training).deliver_later
-      flash[:success] = 'Invitation created'
-      redirect_to training_path(users_training.training.id)
-    else
-      redirect_to root_path, flash: { error: 'Some error occured' }
-    end
+    users_training = UsersTraining.create!(users_training_params)
+    UserMailer.training_invitation(users_training).deliver_later
+    flash[:success] = 'Invitation created'
+    redirect_to training_path(users_training.training.id)
+  rescue ActiveRecord::RecordInvalid
+    redirect_to root_path, flash: { error: 'Some error occured' }
   end
 
   def update
