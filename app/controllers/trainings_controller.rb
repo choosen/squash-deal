@@ -5,8 +5,6 @@ class TrainingsController < ApplicationController
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
-  # GET /trainings
-  # GET /trainings.json
   def index
     respond_to do |format|
       format.json do
@@ -17,20 +15,18 @@ class TrainingsController < ApplicationController
   end
 
   def show
-    @users = @training.users
-    @users_trainings_attended = training_users_trains.where(attended: true)
-    @users_trainings_not_attended = training_users_trains.where(attended: false)
+    return @users = @training.users unless @training.done?
+    ut = @training.users_trainings.includes(:user)
+    @users_trainings_attended = ut.select(&:attended)
+    @users_trainings_not_attended = ut.reject(&:attended)
   end
 
-  # GET /trainings/new
   def new
     @training = Training.new
   end
 
-  # GET /trainings/1/edit
   def edit; end
 
-  # POST /trainings
   def create
     @training = Training.new(training_params)
     if @training.save
@@ -52,8 +48,6 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # DELETE /trainings/1
-  # DELETE /trainings/1.json
   def destroy
     @training.destroy
     redirect_to trainings_url, flash: { notice: 'Training was destroyed' }
@@ -97,10 +91,6 @@ class TrainingsController < ApplicationController
     users_trainings.each do |u_t|
       UserMailer.payment_reminder(u_t, @training).deliver_later
     end
-  end
-
-  def training_users_trains
-    @training.users_trainings
   end
 
   def render_json_errors
