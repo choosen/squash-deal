@@ -30,7 +30,7 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'GET #show' do
-    it 'assigns the requested training as @training' do
+    it 'responds without flash with success' do
       get :show, params: { id: training.to_param }
       expect(controller).not_to set_flash[:error]
       expect(response).to have_http_status(:success)
@@ -38,7 +38,7 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'GET #new' do
-    it 'assigns a new training as @training' do
+    it 'responds with success' do
       get :new
       expect(response).to have_http_status(:success)
     end

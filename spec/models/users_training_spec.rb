@@ -12,6 +12,26 @@ RSpec.describe UsersTraining, type: :model do
 
   subject { users_training }
 
+  describe 'on before_save #set_multisport_used' do
+    context "when user don't have got multisport" do
+      it 'sets multisport_used to false' do
+        subject.save
+        expect(subject.reload.multisport_used).to eq false
+      end
+    end
+
+    context 'when user has multisport' do
+      let(:users_training) do
+        build(:users_training, user: create(:user_with_multi))
+      end
+
+      it 'sets multisport_used to true' do
+        subject.save
+        expect(subject.reload.multisport_used).to eq true
+      end
+    end
+  end
+
   describe '#accepted' do
     subject { users_training.accepted? }
     context 'when accepted_at is present' do
@@ -33,25 +53,20 @@ RSpec.describe UsersTraining, type: :model do
     end
 
     context 'when user attended in training' do
-      before(:each) do
-        training = create(:training_with_users)
-        training.users_trainings.
-          first(2).each { |ut| ut.update(attended: true) }
-        @user_t_with_multi = training.users_trainings.first
-        @user_t_with_multi.update(multisport_used: true)
-        @user_t_no_paid = training.users_trainings.second
+      let(:users_training) do
+        create(:users_training, user: create(:user_with_multi), attended: true)
       end
 
-      context 'and user used multisport' do
-        subject { @user_t_with_multi.user_price }
+      subject { users_training.user_price }
 
-        it { is_expected.to eq @user_t_with_multi.training.price_per_user - 15 }
+      context 'and user used multisport' do
+        it { is_expected.to eq users_training.training.price_per_user - 15 }
       end
 
       context "and user haven't got multisport" do
-        subject { @user_t_no_paid.user_price }
+        let(:users_training) { create(:users_training, attended: true) }
 
-        it { is_expected.to eq @user_t_no_paid.training.price_per_user }
+        it { is_expected.to eq users_training.training.price_per_user }
         it { is_expected.to be_positive }
       end
     end

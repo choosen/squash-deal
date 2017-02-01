@@ -1,5 +1,6 @@
 # assignment between users and trainings
 class UsersTraining < ApplicationRecord
+  before_create :set_multisport_used
   self.primary_keys = :user_id, :training_id
   belongs_to :user, counter_cache: :trainings_count
   belongs_to :training
@@ -35,5 +36,9 @@ class UsersTraining < ApplicationRecord
   def created_before_training_date
     return if training.nil? || training.date >= DateTime.current
     errors.add(:base, 'You can only invite players for future trainings')
+  end
+
+  def set_multisport_used
+    self.multisport_used = user.multisport
   end
 end

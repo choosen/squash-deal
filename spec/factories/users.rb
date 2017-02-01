@@ -10,7 +10,7 @@ FactoryGirl.define do
       admin true
     end
 
-    factory :user_with_multisport do
+    factory :user_with_multi do
       multisport true
     end
 
