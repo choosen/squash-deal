@@ -6,8 +6,6 @@ RSpec.describe Users::TrainingsController, type: :controller do
   let(:training) { FactoryGirl.create(:training) }
 
   describe 'GET #index.json' do
-    render_views
-
     it 'returns http success' do
       get :index, params: { user_id: user.id }, format: :json
       expect(response).to have_http_status(:success)
@@ -39,7 +37,6 @@ RSpec.describe Users::TrainingsController, type: :controller do
 
       it 'expect flash notice' do
         subject
-        expect(controller).to set_flash[:success]
         expect(flash[:success]).to eq 'Invitation created'
       end
     end
@@ -63,6 +60,61 @@ RSpec.describe Users::TrainingsController, type: :controller do
   end
 
   describe 'PUT #update' do
-    pending('#TODO')
+    let(:users_training) { FactoryGirl.create(:users_training) }
+    let(:valid_params) do
+      users_training.attributes.slice('user_id').
+        symbolize_keys.merge(attended: true, id: users_training.training.id)
+    end
+    let(:invalid_params) { valid_params.slice(:user_id).merge(id: -5) }
+
+    context 'with valid params' do
+      subject { put :update, params: valid_params }
+
+      context 'when users_training is not marked as attended' do
+        it 'updates the users_training' do
+          expect { subject }.to change { users_training.reload.attended }
+        end
+
+        it 'redirects to the training and flash success' do
+          subject
+          expect(response).to redirect_to(UsersTraining.last.training)
+          expect(flash[:success]).to eq 'Changed attend state of user'
+        end
+      end
+
+      context 'when users_training is marked as attended' do
+        let(:ut_attended) do
+          FactoryGirl.create(:users_training, attended: true)
+        end
+        let(:valid_params) do
+          ut_attended.attributes.slice('user_id').symbolize_keys.
+            merge(attended: false, id: ut_attended.training.id)
+        end
+
+        it 'updates the users_training' do
+          expect { subject }.to change { ut_attended.reload.attended }
+        end
+
+        it 'redirects to the training and flash success' do
+          subject
+          expect(flash[:success]).to eq 'Changed attend state of user'
+          expect(response).to redirect_to(ut_attended.training)
+        end
+      end
+    end
+
+    context 'with invalid params' do
+      subject { put :update, params: invalid_params }
+
+      it "doesn't change users_training" do
+        expect { subject }.not_to change { users_training.reload.attended }
+      end
+
+      it 'redirects to the root with flash' do
+        subject
+        expect(flash[:error]).to eq 'Error during update'
+        expect(response).to redirect_to(root_path)
+      end
+    end
   end
 end
