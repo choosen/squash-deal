@@ -9,7 +9,7 @@ class Users::TrainingsController < ApplicationController
 
   def create
     users_training = UsersTraining.new(users_training_params)
-    users_training.multisport_used = current_user.multisport
+    users_training.multisport_used = users_training.user.multisport
     if users_training.save
       UserMailer.training_invitation(users_training).deliver_later
       flash[:success] = 'Invitation created'
