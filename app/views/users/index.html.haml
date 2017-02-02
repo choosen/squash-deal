@@ -9,9 +9,11 @@
         %tr
           %th E-mail
           %th # of trainings
+          %th Karta
 
       %tbody
         - @users.each do |user|
           %tr
             %td= link_to user.email, user
             %td= user.trainings_count
+            %td= '*' if user.multisport?
