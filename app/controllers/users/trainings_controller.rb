@@ -19,7 +19,7 @@ class Users::TrainingsController < ApplicationController
   def update
     ut = UsersTraining.find_by(user_id: params[:user_id],
                                training_id: params[:id])
-    ut&.assign_attributes(ut_update_params)
+    ut&.assign_attributes(users_training_params)
     if ut&.changed? && ut.save
       training = ut.training
       redirect_to training, flash: { success: 'User training info updated' }
@@ -31,10 +31,7 @@ class Users::TrainingsController < ApplicationController
   private
 
   def users_training_params
-    params.require(:users_training).permit(:user_id, :training_id)
-  end
-
-  def ut_update_params
-    params.permit(:attended, :multisport_used)
+    params.require(:users_training).permit(:user_id, :training_id,
+                                           :attended, :multisport_used)
   end
 end

@@ -63,11 +63,16 @@ RSpec.describe Users::TrainingsController, type: :controller do
     let(:users_training) { FactoryGirl.create(:users_training) }
     [:attended, :multisport_used].each do |field|
       context "with #{field} in params" do
-        let(:valid_params) do
-          users_training.attributes.slice('user_id').
-            symbolize_keys.merge(field => true, id: users_training.training.id)
+        let(:route_params) do
+          { id: users_training.training.id, user_id: users_training.user.id }
         end
-        let(:wrong_params) { valid_params.slice(:user_id, field).merge(id: 0) }
+        let(:valid_params) do
+          { users_training: users_training.attributes.slice('user_id').
+            symbolize_keys.merge(field => true) }.merge(route_params)
+        end
+        let(:wrong_params) do
+          { users_training: { field => nil } }.merge(id: 0, user_id: 5)
+        end
 
         context 'with valid params' do
           subject { put :update, params: valid_params }
@@ -90,9 +95,11 @@ RSpec.describe Users::TrainingsController, type: :controller do
                 :users_training, field => true, user: create(:user_with_multi)
               )
             end
+            let(:route_params) do
+              { id: ut_attended.training.id, user_id: ut_attended.user.id }
+            end
             let(:valid_params) do
-              ut_attended.attributes.slice('user_id').symbolize_keys.
-                merge(field => false, id: ut_attended.training.id)
+              { users_training: { field => false } }.merge(route_params)
             end
 
             it 'updates the users_training' do

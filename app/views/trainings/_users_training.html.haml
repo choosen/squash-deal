@@ -10,8 +10,10 @@
       .btn-group
         = link_to attended ? 'Set as absence' : 'Set as present',
             user_training_path(users_training.user_id, users_training.training_id,
-            attended: !attended), method: :put, class: 'btn btn-default'
+            users_training: { attended: !attended }),
+            method: :put, class: 'btn btn-default'
         - if attended
           = link_to users_training.multisport_used? ? 'Set as no paid' : 'Set as multisport used',
             user_training_path(users_training.user_id, users_training.training_id,
-            multisport_used: !users_training.multisport_used), method: :put, class: 'btn btn-default'
+            users_training: { multisport_used: !users_training.multisport_used }),
+            method: :put, class: 'btn btn-default'
