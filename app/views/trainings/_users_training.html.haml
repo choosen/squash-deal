@@ -4,8 +4,7 @@
   - if attended
     %td
       - if users_training.multisport_used?
-        = image_tag('http://www.sii.org.pl/static/img/007212/multisport.jpg',
-          height: '32')
+        = image_tag('multisport.jpg', height: '32')
   %td
     - if admin? && !users_training.training.finished
       .btn-group
