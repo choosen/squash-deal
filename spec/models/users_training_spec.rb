@@ -6,7 +6,6 @@ RSpec.describe UsersTraining, type: :model do
 
   it { is_expected.to belong_to :user }
   it { is_expected.to belong_to :training }
-
   it { is_expected.to validate_presence_of :user }
   it { is_expected.to validate_presence_of :training }
 
@@ -73,6 +72,28 @@ RSpec.describe UsersTraining, type: :model do
   end
 
   describe 'custom validations:' do
+    describe '#primary_keys_not_changed on update' do
+      let(:users_training) do
+        create(:users_training, user: create(:user_with_multi), attended: true)
+      end
+
+      context 'when change user' do
+        let(:user) { create(:user) }
+
+        it 'is not valid to change' do
+          expect { subject.user = user }.to change { subject.valid? }
+        end
+      end
+
+      describe 'when change training' do
+        let(:training) { create(:training) }
+
+        it 'is not valid to change' do
+          expect { subject.training = training }.to change { subject.valid? }
+        end
+      end
+    end
+
     describe 'change of accepted_at' do
       context 'when accepted_at is set' do
         let(:users_training) { create(:users_training, accepted_at: today) }

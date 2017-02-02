@@ -8,6 +8,7 @@ class UsersTraining < ApplicationRecord
   validates :training, presence: true
   validates :user, presence: true
   validate :created_before_training_date, on: :create
+  validate :primary_keys_not_changed, on: :update
   validate :accepted_at_not_changed
   validate :accepted_at_before_training
 
@@ -40,5 +41,11 @@ class UsersTraining < ApplicationRecord
 
   def set_multisport_used
     self.multisport_used = user.multisport
+  end
+
+  def primary_keys_not_changed
+    errors.add(:user, 'Change of user is not allowed') if user_id_changed?
+    return unless training_id_changed?
+    errors.add(:training, 'Change of training is not allowed')
   end
 end
