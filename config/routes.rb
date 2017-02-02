@@ -3,7 +3,8 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   resources :users, only: [:index, :show, :edit, :update] do
-    resources :trainings, controller: 'users/trainings', only: [:index, :create, :update]
+    resources :trainings, controller: 'users/trainings', only: [:create, :update]
+    resources :trainings, controller: 'users/trainings', only: [:index], constraints: lambda { |req| req.format == :json }
   end
   resources :trainings do
     get :invite

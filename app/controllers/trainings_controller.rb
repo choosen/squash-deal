@@ -1,11 +1,10 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_training, only: [:show, :edit, :update, :destroy, :close]
+  before_action :set_training, only: [:show, :edit, :update, :destroy,
+                                      :close, :invite]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
-  # GET /trainings
-  # GET /trainings.json
   def index
     respond_to do |format|
       format.json do
@@ -15,23 +14,18 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # GET /trainings/1
-  # GET /trainings/1.json
   def show
-    @users = @training.users
-    @users_trainings_attended = training_users_trains.where(attended: true)
-    @users_trainings_not_attended = training_users_trains.where(attended: false)
+    return @users = @training.users unless @training.done?
+    @users_trainings_attended, @users_trainings_not_attended =
+      @training.users_trainings.includes(:user).partition(&:attended)
   end
 
-  # GET /trainings/new
   def new
     @training = Training.new
   end
 
-  # GET /trainings/1/edit
   def edit; end
 
-  # POST /trainings
   def create
     @training = Training.new(training_params)
     if @training.save
@@ -53,15 +47,12 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # DELETE /trainings/1
-  # DELETE /trainings/1.json
   def destroy
     @training.destroy
     redirect_to trainings_url, flash: { notice: 'Training was destroyed' }
   end
 
   def invite
-    @training = Training.find(params[:training_id])
     @users_training = UsersTraining.new
   end
 
@@ -101,23 +92,21 @@ class TrainingsController < ApplicationController
     end
   end
 
-  def training_users_trains
-    @training.users_trainings
-  end
-
   def render_json_errors
     render json: @training.errors, status: :unprocessable_entity
   end
 
   def set_training
-    @training = Training.find(params[:id] || params[:training_id])
+    @training = Training.find_by(id: params[:id] || params[:training_id])
+    return if @training
+    redirect_to root_path, flash: { error: 'Training not found' }
   end
 
   def set_user_training
     @users_training = UsersTraining.find_by(user: current_user,
                                             training_id: params[:training_id])
     return if @users_training
-    redirect_to root_path, flash: { notice: 'Invitation not found' }
+    redirect_to root_path, flash: { error: 'Invitation not found' }
   end
 
   def training_params
