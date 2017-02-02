@@ -10,6 +10,10 @@ FactoryGirl.define do
       admin true
     end
 
+    factory :user_with_multi do
+      multisport true
+    end
+
     factory :admin, traits: [:admin]
   end
 end

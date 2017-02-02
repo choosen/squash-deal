@@ -1,8 +1,19 @@
 %tr
   %td
-    = users_training.user.email
+    = users_training.user.display_name
+  - if attended
+    %td
+      - if users_training.multisport_used?
+        = image_tag('multisport.jpg', height: '32')
   %td
-    - if admin?
-      = link_to 'Toogle presence',
-          user_training_path(users_training.training_id, users_training.user_id,
-          attended: attended), method: :put, class: 'btn btn-default'
+    - if admin? && !users_training.training.finished
+      .btn-group
+        = link_to attended ? 'Set as absence' : 'Set as present',
+            user_training_path(users_training.user_id, users_training.training_id,
+            users_training: { attended: !attended }),
+            method: :put, class: 'btn btn-default'
+        - if attended
+          = link_to users_training.multisport_used? ? 'Set as no paid' : 'Set as multisport used',
+            user_training_path(users_training.user_id, users_training.training_id,
+            users_training: { multisport_used: !users_training.multisport_used }),
+            method: :put, class: 'btn btn-default'

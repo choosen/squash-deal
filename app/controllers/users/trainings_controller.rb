@@ -8,22 +8,21 @@ class Users::TrainingsController < ApplicationController
   end
 
   def create
-    users_training = UsersTraining.new(users_training_params)
-    if users_training.save
-      UserMailer.training_invitation(users_training).deliver_later
-      flash[:success] = 'Invitation created'
-      redirect_to training_path(users_training.training.id)
-    else
-      flash[:error] = 'Some error occured'
-      redirect_to root_path
-    end
+    users_training = UsersTraining.create!(users_training_params)
+    UserMailer.training_invitation(users_training).deliver_later
+    flash[:success] = 'Invitation created'
+    redirect_to training_path(users_training.training.id)
+  rescue ActiveRecord::RecordInvalid
+    redirect_to root_path, flash: { error: 'Some error occured' }
   end
 
   def update
-    users_training = UsersTraining.find([params[:id], params[:user_id]])
-    if users_training.update!(users_training_update_params)
-      training = users_training.training
-      redirect_to training, flash: { success: 'Changed attend state of user' }
+    ut = UsersTraining.find_by(user_id: params[:user_id],
+                               training_id: params[:id])
+    ut&.assign_attributes(users_training_params)
+    if ut&.changed? && ut.save
+      training = ut.training
+      redirect_to training, flash: { success: 'User training info updated' }
     else
       redirect_to root_path, flash: { error: 'Error during update' }
     end
@@ -32,10 +31,7 @@ class Users::TrainingsController < ApplicationController
   private
 
   def users_training_params
-    params.require(:users_training).permit(:user_id, :training_id)
-  end
-
-  def users_training_update_params
-    params.permit(:attended)
+    params.require(:users_training).permit(:user_id, :training_id,
+                                           :attended, :multisport_used)
   end
 end
