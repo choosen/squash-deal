@@ -14,7 +14,7 @@
 
   .col-md-6
     - if @training.done?
-      - if admin?
+      - if can? :update, @training
         = render 'admin_main_actions_on_finished'
       %h3 Present players
       %table.table
@@ -38,7 +38,7 @@
             collection: @users_trainings_not_attended, as: :users_training,
             locals: { attended: false }
     - else
-      - if admin?
+      - if can? :update, @training
         = link_to 'Invite user to training', training_invite_path(@training)
       %h2 Invited/Accepted players
       %table.table.table-hover.table-condensed

@@ -1,7 +1,7 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_training, only: [:show, :edit, :update, :destroy,
-                                      :close, :invite]
+  load_and_authorize_resource
+  before_action :set_training, only: [:close]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
@@ -28,6 +28,7 @@ class TrainingsController < ApplicationController
 
   def create
     @training = Training.new(training_params)
+    @training.owner = current_user
     if @training.save
       redirect_to @training, flash: { notice: 'Success! Training added' }
     else

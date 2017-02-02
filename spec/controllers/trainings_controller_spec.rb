@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe TrainingsController, type: :controller do
   login_user
-  let(:training) { FactoryGirl.create(:training) }
+  let(:training) { create(:training, owner: controller.current_user) }
 
   let(:valid_attributes) { { date: DateTime.current + 2.days, price: 212 } }
   let(:invalid_attr) { { price: -5, a: 1 } }
@@ -16,7 +16,7 @@ RSpec.describe TrainingsController, type: :controller do
         get :index
         expect(response).to have_http_status(:success)
         expect(response.content_type).to eq('text/html')
-        expect(response.body).to match(/Listing trainings/)
+        expect(response.body).to match(/All trainings/)
       end
     end
 
@@ -85,7 +85,7 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      let!(:training) { create(:training) }
+      let!(:training) { create(:training, owner: controller.current_user) }
       let!(:par) { { date: DateTime.current + 1.day, price: 1890.00 } }
 
       subject { put :update, params: { id: training.to_param, training: par } }
@@ -122,7 +122,10 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    let!(:training_to_destroy) { create(:training) }
+    let!(:training_to_destroy) do
+      create(:training, owner: controller.current_user)
+    end
+
     subject { delete :destroy, params: { id: training_to_destroy.to_param } }
 
     it 'destroys the requested training' do

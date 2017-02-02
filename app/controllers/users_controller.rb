@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_user, only: [:show, :edit, :update]
+  load_and_authorize_resource
 
   def edit; end
 
@@ -14,18 +14,9 @@ class UsersController < ApplicationController
 
   def show; end
 
-  def index
-    @users = User.all
-  end
+  def index; end
 
   private
-
-  def set_user
-    @user = User.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    logger.error "Attempt to access invalid user #{params[:id]}"
-    redirect_to root_url, flash: { notice: 'Invalid user' }
-  end
 
   def user_params
     params.require(:user).
