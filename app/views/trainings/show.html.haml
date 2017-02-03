@@ -12,7 +12,7 @@
       %b Price:
       = @training.price
     %br
-    - if admin?
+    - if can? :update, @training
       = render 'admin_actions_on_training'
 
   .col-md-6

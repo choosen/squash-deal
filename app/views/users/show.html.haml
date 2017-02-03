@@ -1,9 +1,9 @@
-%h1= @user.email
+%h1= @user.display_name
 .row
   .col-md-6.col-md-offset-1
     %h2 Trainings calendar
     .calendar{ id: "user_#{@user.id}" }
-    - if admin?
+    - if can? :edit, @user
       = link_to 'Edit', edit_user_path(@user)
       \|
       = link_to 'Back', users_path
