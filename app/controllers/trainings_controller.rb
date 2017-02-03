@@ -1,7 +1,7 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  before_action :set_training, only: [:update, :close]
+  before_action :set_training, only: [:invite, :close]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
