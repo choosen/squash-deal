@@ -28,7 +28,7 @@ RSpec.describe UsersController, type: :controller do
 
     context 'another user' do
       context 'logged as admin' do
-        login_admin
+        login_user :admin
 
         it 'returns http success' do
           get :edit, params: { id: user.id }

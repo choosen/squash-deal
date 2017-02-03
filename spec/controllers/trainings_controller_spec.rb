@@ -32,7 +32,7 @@ RSpec.describe TrainingsController, type: :controller do
   describe 'GET #show' do
     it 'responds without flash with success' do
       get :show, params: { id: training.to_param }
-      expect(controller).not_to set_flash[:error]
+      expect(controller).not_to set_flash[:notice]
       expect(response).to have_http_status(:success)
     end
   end
@@ -65,7 +65,7 @@ RSpec.describe TrainingsController, type: :controller do
 
       it 'expect flash notice' do
         subject
-        expect(controller).to set_flash[:notice]
+        expect(controller).to set_flash[:success]
       end
     end
 
@@ -85,8 +85,8 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #update' do
     context 'with valid params' do
-      let!(:training) { create(:training, owner: controller.current_user) }
-      let!(:par) { { date: DateTime.current + 1.day, price: 1890.00 } }
+      let(:training) { create(:training, owner: controller.current_user) }
+      let(:par) { { date: DateTime.current + 1.day, price: 1890.00 } }
 
       subject { put :update, params: { id: training.to_param, training: par } }
 
@@ -101,7 +101,7 @@ RSpec.describe TrainingsController, type: :controller do
 
       it 'expect flash notice' do
         subject
-        expect(controller).to set_flash[:notice]
+        expect(controller).to set_flash[:success]
       end
     end
 
@@ -160,7 +160,7 @@ RSpec.describe TrainingsController, type: :controller do
         it 'flashes error' do
           subject
           # current_user can accept its own invitations
-          expect(flash[:error]).to eq 'Invitation not found'
+          expect(flash[:notice]).to eq 'Invitation not found'
         end
       end
 
@@ -175,7 +175,7 @@ RSpec.describe TrainingsController, type: :controller do
         it 'flashes error' do
           subject
           # current_user can accept its own invitations
-          expect(flash[:error]).to eq 'Invitation not found'
+          expect(flash[:notice]).to eq 'Invitation not found'
         end
       end
     end

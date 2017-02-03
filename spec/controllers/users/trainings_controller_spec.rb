@@ -54,14 +54,17 @@ RSpec.describe Users::TrainingsController, type: :controller do
       it 'redirects to root with flash' do
         subject
         expect(response).to redirect_to(root_path)
-        expect(controller).to set_flash[:error]
+        expect(controller).to set_flash[:notice]
       end
     end
   end
 
   describe 'PUT #update' do
-    let(:users_training) { FactoryGirl.create(:users_training) }
     [:attended, :multisport_used].each do |field|
+      let(:users_training) do
+        FactoryGirl.create(:users_training, user: controller.current_user)
+      end
+
       context "with #{field} in params" do
         let(:route_params) do
           { id: users_training.training.id, user_id: users_training.user.id }
@@ -71,7 +74,7 @@ RSpec.describe Users::TrainingsController, type: :controller do
             symbolize_keys.merge(field => true) }.merge(route_params)
         end
         let(:wrong_params) do
-          { users_training: { field => nil } }.merge(id: 0, user_id: 5)
+          { users_training: { field => 1 } }.merge(id: 0, user_id: 5)
         end
 
         context 'with valid params' do
@@ -84,15 +87,17 @@ RSpec.describe Users::TrainingsController, type: :controller do
 
             it 'redirects to the training and flash success' do
               subject
-              expect(response).to redirect_to(UsersTraining.last.training)
               expect(flash[:success]).to eq 'User training info updated'
+              expect(response).to redirect_to(UsersTraining.last.training)
             end
           end
 
           context "when users_training is marked as #{field}" do
+            login_user :user_with_multi
+
             let(:ut_attended) do
               FactoryGirl.create(
-                :users_training, field => true, user: create(:user_with_multi)
+                :users_training, field => true, user: controller.current_user
               )
             end
             let(:route_params) do
@@ -124,7 +129,7 @@ RSpec.describe Users::TrainingsController, type: :controller do
 
           it 'redirects to the root with flash' do
             subject
-            expect(flash[:error]).to eq 'Error during update'
+            expect(controller).to set_flash[:error]
             expect(response).to redirect_to(root_path)
           end
         end
