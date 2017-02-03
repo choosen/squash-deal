@@ -1,11 +1,10 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_training, only: [:show, :edit, :update, :destroy, :close]
+  load_and_authorize_resource
+  before_action :set_training, only: [:update, :close]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
-  # GET /trainings
-  # GET /trainings.json
   def index
     respond_to do |format|
       format.json do
@@ -15,27 +14,21 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # GET /trainings/1
-  # GET /trainings/1.json
   def show
-    @users = @training.users
-    @users_trainings_attended = training_users_trains.where(attended: true)
-    @users_trainings_not_attended = training_users_trains.where(attended: false)
+    return @users = @training.users unless @training.done?
+    @users_trainings_attended, @users_trainings_not_attended =
+      @training.users_trainings.includes(:user).partition(&:attended)
   end
 
-  # GET /trainings/new
   def new
     @training = Training.new
   end
 
-  # GET /trainings/1/edit
-  def edit; end
-
-  # POST /trainings
   def create
     @training = Training.new(training_params)
+    @training.owner = current_user
     if @training.save
-      redirect_to @training, flash: { notice: 'Success! Training added' }
+      redirect_to @training, flash: { success: 'Success! Training added' }
     else
       render :new
     end
@@ -44,7 +37,7 @@ class TrainingsController < ApplicationController
   def update
     respond_to do |f|
       if @training.update(training_params)
-        f.html { redirect_to @training, flash: { notice: 'Training updated.' } }
+        f.html { redirect_to @training, flash: { success: 'Game updated' } }
         f.json { render :show, status: :ok, location: @training }
       else
         f.html { render :edit }
@@ -53,15 +46,12 @@ class TrainingsController < ApplicationController
     end
   end
 
-  # DELETE /trainings/1
-  # DELETE /trainings/1.json
   def destroy
     @training.destroy
-    redirect_to trainings_url, flash: { notice: 'Training was destroyed' }
+    redirect_to trainings_url, flash: { success: 'Training was destroyed' }
   end
 
   def invite
-    @training = Training.find(params[:training_id])
     @users_training = UsersTraining.new
   end
 
@@ -69,7 +59,7 @@ class TrainingsController < ApplicationController
     if @users_training.update(accepted_at: DateTime.current)
       flash[:success] = 'Invitation accepted'
     else
-      flash[:error] = 'Invitation already accepted or it\'s to late'
+      flash[:notice] = 'Invitation already accepted or it\'s to late'
     end
     redirect_to root_path
   end
@@ -86,7 +76,7 @@ class TrainingsController < ApplicationController
       sent_payments_to_users
       flash[:success] = 'Training fees were sent to users'
     else
-      flash[:error] = 'Error occured'
+      flash[:notice] = 'Error occured'
     end
     redirect_to @training
   end
@@ -101,22 +91,20 @@ class TrainingsController < ApplicationController
     end
   end
 
-  def training_users_trains
-    @training.users_trainings
-  end
-
   def render_json_errors
     render json: @training.errors, status: :unprocessable_entity
   end
 
   def set_training
-    @training = Training.find(params[:id] || params[:training_id])
+    @training = Training.find_by(id: params[:id] || params[:training_id])
+    return if @training
+    redirect_to root_path, flash: { notice: 'Training not found' }
   end
 
   def set_user_training
     @users_training = UsersTraining.find_by(user: current_user,
                                             training_id: params[:training_id])
-    return if @users_training
+    return authorize!(:reaction_to_invite, @users_training) if @users_training
     redirect_to root_path, flash: { notice: 'Invitation not found' }
   end
 

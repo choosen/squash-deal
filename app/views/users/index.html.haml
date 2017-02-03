@@ -1,17 +1,23 @@
 %h1 Players
+
 .row
   .col-md-6.col-md-offset-1
-    = link_to 'Invite new user', new_user_invitation_path
+    = link_to 'Invite new user', new_user_invitation_path,
+      class: 'btn btn-default'
     %br
     %br
     %table.table.table-hover.table-condensed
       %thead
         %tr
+          %th Name
           %th E-mail
           %th # of trainings
+          %th Karta
 
       %tbody
         - @users.each do |user|
           %tr
-            %td= link_to user.email, user
+            %td= link_to formatted_user_name(user), user
+            %td= mail_to user.email
             %td= user.trainings_count
+            %td= '*' if user.multisport?

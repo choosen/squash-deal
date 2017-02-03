@@ -35,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap-sass'
+gem 'cancancan'
 gem 'composite_primary_keys'
 gem 'devise'
 # gem 'devise-async'
@@ -75,6 +76,7 @@ group :development do
 end
 
 group :test do
+  gem 'shoulda-matchers'
   gem 'timecop'
 end
 

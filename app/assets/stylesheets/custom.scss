@@ -6,6 +6,9 @@
 $three-seven: #777;
 $three-b: #bbb;
 $gray-medium-light: #eaeaea;
+$green-calendar: #008000;
+$red-calendar: #f00;
+$darksalmon-calendar: #e9967a;
 
 @mixin box-sizing {
   box-sizing: border-box;
@@ -61,6 +64,18 @@ h2 {
 p {
   font-size: 1.1em;
   line-height: 1.7em;
+}
+
+.text-success {
+  color: $green-calendar;
+}
+
+.text-danger {
+  color: $red-calendar;
+}
+
+.text-warning {
+  color: $darksalmon-calendar;
 }
 
 // header

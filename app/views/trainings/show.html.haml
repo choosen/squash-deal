@@ -1,6 +1,10 @@
 %h1 Training info
 .row
   .col-md-4.col-md-offset-1
+    %h3 Basics
+    %p
+      %b Owner:
+      = @training.owner.display_name
     %p
       %b Date:
       = @training.date
@@ -8,40 +12,42 @@
       %b Price:
       = @training.price
     %br
-    - if admin?
+    - if can? :update, @training
       = render 'admin_actions_on_training'
 
-  .col-md-4
+  .col-md-6
     - if @training.done?
-      - if admin?
+      - if can? :update, @training
         = render 'admin_main_actions_on_finished'
-      %h2 Present players
+      %h3 Present players
       %table.table
         %thead
           %tr
-            %th E-mail
+            %th Player
+            %th Multi
             %th Action
         %tbody
           = render partial: 'trainings/users_training',
             collection: @users_trainings_attended, as: :users_training,
-            locals: { attended: false }
-      %h2 Absences
+            locals: { attended: true }
+      %h3 Absences
       %table.table
         %thead
           %tr
-            %th E-mail
+            %th Player
             %th Action
         %tbody
           = render partial: 'trainings/users_training',
             collection: @users_trainings_not_attended, as: :users_training,
-            locals: { attended: true }
+            locals: { attended: false }
     - else
-      - if admin?
-        = link_to 'Invite user to training', training_invite_path(@training)
+      - if can? :update, @training
+        = link_to 'Invite user to training', training_invite_path(@training),
+          class: 'btn btn-default'
       %h2 Invited/Accepted players
       %table.table.table-hover.table-condensed
         %thead
           %tr
-            %th E-mail
+            %th Player
         %tbody
           = render @users

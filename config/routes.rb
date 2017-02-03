@@ -1,9 +1,18 @@
 Rails.application.routes.draw do
-  devise_for :users
+  authenticated do
+    root to: redirect { |params, request|
+      "users/#{request.env["warden"]&.user&.id || ''}"
+    }
+  end
+
   root to: 'home#index'
+  get '/home', to: 'home#index'
+
+  devise_for :users
 
   resources :users, only: [:index, :show, :edit, :update] do
-    resources :trainings, controller: 'users/trainings', only: [:index, :create, :update]
+    resources :trainings, controller: 'users/trainings', only: [:create, :update]
+    resources :trainings, controller: 'users/trainings', only: [:index], constraints: lambda { |req| req.format == :json }
   end
   resources :trainings do
     get :invite
