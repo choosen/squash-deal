@@ -31,7 +31,7 @@ RSpec.describe UserMailer, type: :mailer do
       perform_enqueued_jobs { subject }
 
       mail = ActionMailer::Base.deliveries.last
-      expect(mail.body.encoded).to match("Hello #{user_t.user.email}")
+      expect(mail.body.encoded).to match("Hello #{user_t.user.display_name}")
       expect(mail.body.encoded).
         to match('You are invited to take a part in squash training at')
       expect(mail.body.encoded).to match('Confirm play')
@@ -49,7 +49,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match("Hello #{user_t.user.email}")
+      expect(mail.body.encoded).to match("Hello #{user_t.user.display_name}")
       expect(mail.body.encoded).
         to match("You played squash training at #{I18n.l training.date}")
       expect(mail.body.encoded).to match('Cost of training is')
@@ -67,7 +67,7 @@ RSpec.describe UserMailer, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match("Hello #{user_t.user.email}")
+      expect(mail.body.encoded).to match("Hello #{user_t.user.display_name}")
       expect(mail.body.encoded).
         to match('You accepted invitation to squash training at')
       expect(mail.body.encoded).to match("Don't be late!")

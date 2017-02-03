@@ -1,7 +1,7 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_training, only: [:show, :edit, :update, :destroy,
-                                      :close, :invite]
+  load_and_authorize_resource
+  before_action :set_training, only: [:update, :close]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
@@ -24,12 +24,11 @@ class TrainingsController < ApplicationController
     @training = Training.new
   end
 
-  def edit; end
-
   def create
     @training = Training.new(training_params)
+    @training.owner = current_user
     if @training.save
-      redirect_to @training, flash: { notice: 'Success! Training added' }
+      redirect_to @training, flash: { success: 'Success! Training added' }
     else
       render :new
     end
@@ -38,7 +37,7 @@ class TrainingsController < ApplicationController
   def update
     respond_to do |f|
       if @training.update(training_params)
-        f.html { redirect_to @training, flash: { notice: 'Training updated.' } }
+        f.html { redirect_to @training, flash: { success: 'Game updated' } }
         f.json { render :show, status: :ok, location: @training }
       else
         f.html { render :edit }
@@ -49,7 +48,7 @@ class TrainingsController < ApplicationController
 
   def destroy
     @training.destroy
-    redirect_to trainings_url, flash: { notice: 'Training was destroyed' }
+    redirect_to trainings_url, flash: { success: 'Training was destroyed' }
   end
 
   def invite
@@ -60,7 +59,7 @@ class TrainingsController < ApplicationController
     if @users_training.update(accepted_at: DateTime.current)
       flash[:success] = 'Invitation accepted'
     else
-      flash[:error] = 'Invitation already accepted or it\'s to late'
+      flash[:notice] = 'Invitation already accepted or it\'s to late'
     end
     redirect_to root_path
   end
@@ -77,7 +76,7 @@ class TrainingsController < ApplicationController
       sent_payments_to_users
       flash[:success] = 'Training fees were sent to users'
     else
-      flash[:error] = 'Error occured'
+      flash[:notice] = 'Error occured'
     end
     redirect_to @training
   end
@@ -99,14 +98,14 @@ class TrainingsController < ApplicationController
   def set_training
     @training = Training.find_by(id: params[:id] || params[:training_id])
     return if @training
-    redirect_to root_path, flash: { error: 'Training not found' }
+    redirect_to root_path, flash: { notice: 'Training not found' }
   end
 
   def set_user_training
     @users_training = UsersTraining.find_by(user: current_user,
                                             training_id: params[:training_id])
-    return if @users_training
-    redirect_to root_path, flash: { error: 'Invitation not found' }
+    return authorize!(:reaction_to_invite, @users_training) if @users_training
+    redirect_to root_path, flash: { notice: 'Invitation not found' }
   end
 
   def training_params
