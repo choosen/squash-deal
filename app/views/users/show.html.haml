@@ -1,9 +1,13 @@
-%h1= @user.email
+%h1= @user.display_name
+
 .row
   .col-md-6.col-md-offset-1
     %h2 Trainings calendar
     .calendar{ id: "user_#{@user.id}" }
-    - if admin?
-      = link_to 'Edit', edit_user_path(@user)
-      \|
-      = link_to 'Back', users_path
+    %br
+    = render 'color_info'
+    - if can? :edit, @user
+      %br
+      .btn-group
+        = link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
+        = link_to 'Back', users_path, class: 'btn btn-default'

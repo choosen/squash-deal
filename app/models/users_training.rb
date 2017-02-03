@@ -44,6 +44,7 @@ class UsersTraining < ApplicationRecord
   end
 
   def primary_keys_not_changed
+    return unless persisted?
     errors.add(:user, 'Change of user is not allowed') if user_id_changed?
     return unless training_id_changed?
     errors.add(:training, 'Change of training is not allowed')

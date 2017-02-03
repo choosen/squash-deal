@@ -1,4 +1,4 @@
-%h1 Listing trainings
+%h1 All trainings
 .row
   .col-md-6.col-md-offset-2
     = link_to 'New Training', new_training_path, class: '.btn .btn-default'
@@ -6,3 +6,5 @@
     %br
 
     .calendar
+    %br
+    = render 'color_info'

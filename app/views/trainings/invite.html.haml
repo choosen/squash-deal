@@ -7,4 +7,4 @@
       = f.association :user, label_method: :email, include_blank: false
       = f.hidden_field :training_id, value: @training.id
       = f.button :submit
-    = link_to 'Back', @training
+    = link_to 'Back', @training, class: 'btn btn-default'

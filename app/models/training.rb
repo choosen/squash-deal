@@ -2,8 +2,10 @@
 class Training < ApplicationRecord
   has_many :users, through: :users_trainings
   has_many :users_trainings, dependent: :destroy
+  belongs_to :owner, class_name: 'User'
 
   validates :date, presence: true
+  validates :owner, presence: true
   validates :price, allow_nil: true, numericality: { greater_than: 0.0 }
   validate :date_cannot_be_in_the_past, on: :create
 
