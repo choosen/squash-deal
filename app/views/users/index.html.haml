@@ -17,7 +17,7 @@
       %tbody
         - @users.each do |user|
           %tr
-            %td= link_to user.name || 'missing', user
+            %td= link_to formatted_user_name(user), user
             %td= mail_to user.email
             %td= user.trainings_count
             %td= '*' if user.multisport?
