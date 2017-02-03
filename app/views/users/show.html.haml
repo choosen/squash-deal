@@ -5,7 +5,7 @@
     %h2 Trainings calendar
     .calendar{ id: "user_#{@user.id}" }
     %br
-    =render 'color_info'
+    = render 'color_info'
     - if can? :edit, @user
       %br
       .btn-group
