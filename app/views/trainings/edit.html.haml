@@ -4,6 +4,6 @@
   .col-md-6.col-md-offset-1
     = render 'form'
 
-    = link_to 'Show', @training
-    \|
-    = link_to 'Back', trainings_path
+    .btn-group
+      = link_to 'Show', @training, class: 'btn btn-default'
+      = link_to 'Back', trainings_path, class: 'btn btn-default'

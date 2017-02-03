@@ -5,7 +5,12 @@ if users_training.accepted?
   json.color 'Green'
   json.url training_url(users_training.training, format: :html)
 else
-  json.color 'DarkSalmon'
-  json.url training_invitation_accept_url(users_training.training,
-                                          format: :html)
+  if users_training.training.done?
+    json.color 'Red'
+    json.url training_url(users_training.training, format: :html)
+  else
+    json.color 'DarkSalmon'
+    json.url training_invitation_accept_url(users_training.training,
+                                            format: :html)
+  end
 end
