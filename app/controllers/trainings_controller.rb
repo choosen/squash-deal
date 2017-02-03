@@ -24,8 +24,6 @@ class TrainingsController < ApplicationController
     @training = Training.new
   end
 
-  def edit; end
-
   def create
     @training = Training.new(training_params)
     @training.owner = current_user
