@@ -43,6 +43,7 @@ gem 'devise_invitable'
 gem 'fullcalendar-rails'
 gem 'haml-rails'
 gem 'momentjs-rails'
+gem 'omniauth-google-oauth2'
 gem 'rails-i18n'
 gem 'rails_12factor', group: :production
 gem 'redis'
