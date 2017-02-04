@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :users_trainings, dependent: :destroy
 
   def set_name_if_blank
-    self.name = email.split('@').first.titleize if name.blank?
+    self.name = email&.split('@').first.titleize if name.blank?
   end
 
   def display_name
@@ -20,14 +20,14 @@ class User < ApplicationRecord
   def self.from_omniauth(access_token)
     data = access_token.info
     user = User.find_by(email: data['email'])
+    user || User.create_without_invite(name: data['name'],
+                                       email: data['email'],
+                                       password: Devise.friendly_token[0, 20])
+  end
 
-    # users to be created if they don't exist
-    unless user
-      user = User.create(name: data['name'],
-                         email: data['email'],
-                         password: Devise.friendly_token[0, 20])
-      user.confirm
-    end
+  def self.create_without_invite(params)
+    user = User.invite!(params) { |u| u.skip_invitation = true }
+    user.accept_invitation!
     user
   end
 end

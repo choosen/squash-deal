@@ -4,7 +4,7 @@ module ControllerMacros
     before(:each) do
       @request.env['devise.mapping'] = Devise.mappings[:user]
       user = FactoryGirl.create(factory_mode || :user)
-      user.confirm
+      user.accept_invitation!
       sign_in user
     end
   end

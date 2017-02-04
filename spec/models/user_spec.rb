@@ -40,4 +40,49 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe '#create_without_invite' do
+    let(:params) { { email: 'test@test.com' } }
+
+    subject { User.create_without_invite(params) }
+
+    it { is_expected.to be_instance_of(User) }
+    it 'is confirmed' do
+      expect(subject.confirmed?).to eq true
+    end
+  end
+
+  describe '#from_omniauth' do
+    let!(:info_hash) { { 'email' => 'test@test.com', 'name' => 'Rob' } }
+    let(:user) { create(:user_with_multi, info_hash.symbolize_keys) }
+    let(:access_token) { double('access_token', info: info_hash) }
+
+    subject { User.from_omniauth(access_token) }
+
+    context 'when email is new' do
+      it { is_expected.to be_instance_of User }
+
+      it 'adds new user' do
+        expect { subject }.to change { User.count }.by 1
+      end
+
+      it 'set given user name' do
+        expect(subject.name).to eq info_hash['name']
+      end
+    end
+
+    context 'when email is registred' do
+      before(:each) do
+        user
+      end
+
+      it 'returns his user' do
+        expect(subject).to eq user
+      end
+
+      it "don't add new user" do
+        expect { subject }.not_to change { User.count }
+      end
+    end
+  end
 end
