@@ -10,7 +10,7 @@ class User < ApplicationRecord
   has_many :users_trainings, dependent: :destroy
 
   def set_name_if_blank
-    self.name = email.split('@').first if name.blank?
+    self.name = email.split('@').first.titleize if name.blank?
   end
 
   def display_name
@@ -26,6 +26,7 @@ class User < ApplicationRecord
       user = User.create(name: data['name'],
                          email: data['email'],
                          password: Devise.friendly_token[0, 20])
+      user.confirm
     end
     user
   end
