@@ -48,7 +48,6 @@ class TrainingsController < ApplicationController
 
   def invite
     @users_training = UsersTraining.new(training: @training)
-    authorize! :invite, @training
   end
 
   def invitation_accept
@@ -68,7 +67,6 @@ class TrainingsController < ApplicationController
   end
 
   def close
-    authorize! :close, @training
     if @training.update(finished: true)
       sent_payments_to_users
       flash[:success] = 'Training fees were sent to users'

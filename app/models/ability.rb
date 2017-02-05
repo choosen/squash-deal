@@ -12,14 +12,13 @@ class Ability
   end
 
   def define_user_priviliges(user)
-    alias_action :create, :update, :invite, to: :handle
     alias_action :invitation_accept, :invitation_remove, to: :reaction_to_invite
 
     can :read, :all
     can :manage, User, id: user.id
     can :create, Training
     can :manage, Training, owner: user
-    can :handle, UsersTraining, training: { owner: user }
+    can :update, UsersTraining, training: { owner: user }
     can :reaction_to_invite, UsersTraining, user: user
   end
 end
