@@ -7,6 +7,8 @@ class User < ApplicationRecord
          :confirmable, :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
   has_many :trainings, through: :users_trainings
+  has_many :owned_trainings, class_name: 'Training', foreign_key: 'owner_id',
+                             dependent: :nullify
   has_many :users_trainings, dependent: :destroy
 
   def set_name_if_blank

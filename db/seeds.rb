@@ -3,6 +3,8 @@ User.create_without_invite(email: 'admin@sample.com',
 
 player = User.create_without_invite(email: 'player@sample.com',
                                     password: '12345678')
-
-training = Training.create(date: DateTime.now, price: 120.00)
-training.users << player
+if player
+  training = Training.create!(date: DateTime.now + 1.day, price: 120.00,
+                              owner: player)
+  training.users << player
+end
