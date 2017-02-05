@@ -139,15 +139,29 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'GET #invite' do
-    it 'displays invite to training form' do
-      get :invite, params: { training_id: training.to_param }
-      expect(response).to have_http_status(:success)
+    subject { get :invite, params: { id: training.to_param } }
+
+    context 'to owned training' do
+      it 'displays invite to training form' do
+        subject
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'to not owned training' do
+      let(:training) { create(:training) }
+
+      it 'redirect_to root and flashes error' do
+        subject
+        expect(controller).to redirect_to root_path
+        expect(controller).to set_flash[:notice]
+      end
     end
   end
 
   describe 'reactions for invitation:' do
     context 'when params are invalid' do
-      let!(:invalid_params) { { training_id: training.to_param } }
+      let(:invalid_params) { { id: training.to_param } }
 
       describe 'GET #invitation_accept' do
         subject { get :invitation_accept, params: invalid_params }
@@ -182,7 +196,7 @@ RSpec.describe TrainingsController, type: :controller do
 
     context 'when params are valid: ' do
       let!(:ut) { create(:users_training, user: controller.current_user) }
-      let!(:valid_params) { { training_id: ut.training.to_param } }
+      let!(:valid_params) { { id: ut.training.to_param } }
 
       describe 'GET #invitation_accept' do
         subject { get :invitation_accept, params: valid_params }
@@ -213,9 +227,11 @@ RSpec.describe TrainingsController, type: :controller do
   end
 
   describe 'PUT #close' do
-    let!(:ut) { create(:users_training, attended: true) }
+    let(:ut) do
+      create(:users_training, attended: true, user: controller.current_user)
+    end
 
-    subject { put :close, params: { training_id: ut.training.to_param } }
+    subject { put :close, params: { id: ut.training.to_param } }
 
     it 'updates training.finished' do
       expect { subject }.to change { ut.reload.training.finished }.from(false)

@@ -1,7 +1,6 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
-  before_action :set_training, only: [:update, :close]
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
@@ -18,10 +17,6 @@ class TrainingsController < ApplicationController
     return @users = @training.users unless @training.done?
     @users_trainings_attended, @users_trainings_not_attended =
       @training.users_trainings.includes(:user).partition(&:attended)
-  end
-
-  def new
-    @training = Training.new
   end
 
   def create
@@ -52,7 +47,8 @@ class TrainingsController < ApplicationController
   end
 
   def invite
-    @users_training = UsersTraining.new
+    @users_training = UsersTraining.new(training: @training)
+    authorize! :invite, @training
   end
 
   def invitation_accept
@@ -72,6 +68,7 @@ class TrainingsController < ApplicationController
   end
 
   def close
+    authorize! :close, @training
     if @training.update(finished: true)
       sent_payments_to_users
       flash[:success] = 'Training fees were sent to users'
@@ -95,15 +92,9 @@ class TrainingsController < ApplicationController
     render json: @training.errors, status: :unprocessable_entity
   end
 
-  def set_training
-    @training = Training.find_by(id: params[:id] || params[:training_id])
-    return if @training
-    redirect_to root_path, flash: { notice: 'Training not found' }
-  end
-
   def set_user_training
     @users_training = UsersTraining.find_by(user: current_user,
-                                            training_id: params[:training_id])
+                                            training: @training)
     return authorize!(:reaction_to_invite, @users_training) if @users_training
     redirect_to root_path, flash: { notice: 'Invitation not found' }
   end

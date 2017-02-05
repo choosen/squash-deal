@@ -10,7 +10,7 @@ else
     json.url training_url(users_training.training, format: :html)
   else
     json.color 'DarkSalmon'
-    json.url training_invitation_accept_url(users_training.training,
+    json.url invitation_accept_training_url(users_training.training,
                                             format: :html)
   end
 end
