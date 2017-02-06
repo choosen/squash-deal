@@ -19,10 +19,6 @@ class TrainingsController < ApplicationController
       @training.users_trainings.includes(:user).partition(&:attended)
   end
 
-  def new
-    @training = Training.new(price: 55.00)
-  end
-
   def create
     @training = Training.new(training_params)
     @training.owner = current_user

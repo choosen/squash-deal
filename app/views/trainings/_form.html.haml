@@ -2,8 +2,8 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :date
-    = f.input :price
+    = f.input :date, as: :datetime, html5: true
+    = f.input :price, input_html: { value: f.object.price || 55.00 }
 
   .form-actions
     = f.button :submit
