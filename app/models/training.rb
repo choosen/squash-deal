@@ -7,7 +7,8 @@ class Training < ApplicationRecord
   validates :date, presence: true
   validates :owner, presence: true
   validates :price, allow_nil: true, numericality: { greater_than: 0.0 }
-  validate :date_cannot_be_in_the_past, on: :create
+  validate :date_cannot_be_change_to_the_past
+  validate :finished_cannot_be_changed, on: :update
 
   scope :date_between,
         ->(start, end_d) { where('date >= ? AND date <= ?', start, end_d) }
@@ -23,8 +24,13 @@ class Training < ApplicationRecord
     price / number_of_present
   end
 
-  def date_cannot_be_in_the_past
-    return if date.nil? || date > DateTime.current
+  def date_cannot_be_change_to_the_past
+    return if date.nil? || !date_changed? || date.future?
     errors.add(:date, 'Training date must be in the future')
+  end
+
+  def finished_cannot_be_changed
+    return if !persisted? || !finished_was
+    errors.add(:base, 'Training cannot be changed after finishing')
   end
 end

@@ -80,15 +80,39 @@ RSpec.describe Training, type: :model do
   end
 
   describe 'custom validation:' do
-    describe 'create training' do
-      context 'with date set in the future' do
+    describe '#date_cannot_be_change_to_the_past' do
+      context 'when date is set in the future' do
         it { is_expected.to be_valid }
       end
 
-      context 'with date set in the past' do
-        it 'is prohibited' do
-          expect { subject.date = dt_now - 1.day }.to change { subject.valid? }.
-            from(true).to(false)
+      context 'when date is set in the past' do
+        context 'when we change date' do
+          it 'validates false' do
+            expect { subject.date = dt_now - 1.day }.
+              to change { subject.valid? }.from(true).to(false)
+          end
+        end
+      end
+
+      context 'when date was set in the past' do
+        context 'when we change price' do
+          it 'validates as true' do
+            expect { subject.price += 1 }.not_to change { subject.valid? }
+          end
+        end
+      end
+    end
+
+    describe '#finished_cannot_be_changed' do
+      context 'when we change price' do
+        context 'when training is finished' do
+          let(:training) { create(:training, finished: true) }
+
+          it { is_expected.to be_invalid }
+        end
+
+        context 'when training is open' do
+          it { is_expected.to be_valid }
         end
       end
     end

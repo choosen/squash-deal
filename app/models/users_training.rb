@@ -7,10 +7,11 @@ class UsersTraining < ApplicationRecord
 
   validates :training, presence: true
   validates :user, presence: true
-  validate :created_before_training_date, on: :create
+  validate :cannot_create_before_training_date, on: :create
   validate :primary_keys_not_changed, on: :update
   validate :accepted_at_not_changed
   validate :accepted_at_before_training
+  validate :cannot_change_finished_training, on: :update
 
   def accepted?
     accepted_at.present?
@@ -34,9 +35,14 @@ class UsersTraining < ApplicationRecord
     errors.add(:accepted_at, 'User can accept invitition before training')
   end
 
-  def created_before_training_date
-    return if training.nil? || training.date >= DateTime.current
+  def cannot_create_before_training_date
+    return if training.nil? || training.date.future?
     errors.add(:base, 'You can only invite players for future trainings')
+  end
+
+  def cannot_change_finished_training
+    return if training.nil? || !training.finished
+    errors.add(:base, 'You cannot changed already finished trainings')
   end
 
   def set_multisport_used
