@@ -19,6 +19,10 @@ class TrainingsController < ApplicationController
       @training.users_trainings.includes(:user).partition(&:attended)
   end
 
+  def new
+    @training = Training.new(price: 55.00)
+  end
+
   def create
     @training = Training.new(training_params)
     @training.owner = current_user
@@ -47,7 +51,7 @@ class TrainingsController < ApplicationController
   end
 
   def invite
-    @users_training = UsersTraining.new(training: @training)
+    @users_training = @training.users_trainings.new
   end
 
   def invitation_accept
