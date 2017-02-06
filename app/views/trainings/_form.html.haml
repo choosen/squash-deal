@@ -2,8 +2,13 @@
   = f.error_notification
 
   .form-inputs
-    = f.input :date
-    = f.input :price, input_html: { value: 55.00 }
+    .form-group
+      = f.label :date
+      .input-group.date.js-datetimepicker
+        = f.input_field :date, as: :string, class: 'form-control'
+        %span.input-group-addon
+          %span.glyphicon.glyphicon-calendar
+    = f.input :price, input_html: { value: f.object.price || 55.00 }
 
   .form-actions
     = f.button :submit

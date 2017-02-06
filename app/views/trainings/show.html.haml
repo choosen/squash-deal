@@ -7,7 +7,7 @@
       = @training.owner.display_name
     %p
       %b Date:
-      = @training.date
+      = l @training.date
     %p
       %b Price:
       = @training.price
@@ -42,7 +42,7 @@
             locals: { attended: false }
     - else
       - if can? :update, @training
-        = link_to 'Invite user to training', training_invite_path(@training),
+        = link_to 'Invite user to training', invite_training_path(@training),
           class: 'btn btn-default'
       %h2 Invited/Accepted players
       %table.table.table-hover.table-condensed

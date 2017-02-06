@@ -3,14 +3,23 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on 'turbolinks:load', ->
-  return unless $(".calendar").length > 0
-  cdID = $(".calendar").attr('id')
-  $(".calendar").html ''
+  return unless $(".js-calendar").length > 0
+  cdID = $(".js-calendar").attr('id')
+  $(".js-calendar").html ''
   if (cdID != undefined)
-    $(".calendar").fullCalendar(
+    $(".js-calendar").fullCalendar(
       events: '/users/' + cdID.split("_")[1] + '/trainings.json'
     )
   else
-    $(".calendar").fullCalendar(
+    $(".js-calendar").fullCalendar(
       events: '/trainings.json'
     )
+
+$(document).on 'turbolinks:load', ->
+  $('.js-datetimepicker').datetimepicker({
+    inline: true,
+    stepping: 10,
+    sideBySide: false,
+    format: 'DD.MM.YYYY HH:mm'
+    minDate: new Date()
+  })

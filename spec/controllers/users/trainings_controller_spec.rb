@@ -3,7 +3,6 @@ require 'rails_helper'
 RSpec.describe Users::TrainingsController, type: :controller do
   login_user
   let(:user) { FactoryGirl.create(:user) }
-  let(:training) { FactoryGirl.create(:training) }
 
   describe 'GET #index.json' do
     it 'returns http success' do
@@ -14,7 +13,9 @@ RSpec.describe Users::TrainingsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:users_training) { FactoryGirl.build(:users_training) }
+    let(:users_training) do
+      FactoryGirl.build(:users_training, user: controller.current_user)
+    end
     let(:valid_params) do
       users_training.attributes.slice('user_id', 'training_id').symbolize_keys
     end
