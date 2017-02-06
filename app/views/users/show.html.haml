@@ -2,12 +2,25 @@
 
 .row
   .col-md-6.col-md-offset-1
-    %h2 Trainings calendar
-    .calendar{ id: "user_#{@user.id}" }
-    %br
-    = render 'color_info'
+    %table.table
+      %thead
+        %tr
+          %th
+            E-mail
+          %th
+            Multisport
+      %tbody
+        %tr
+          %td
+            = @user.email
+          %td
+            = @user.multisport
     - if can? :edit, @user
-      %br
       .btn-group
+        = link_to 'New Training', new_training_path, class: 'btn btn-default'
         = link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
         = link_to 'Back', users_path, class: 'btn btn-default'
+    %h2 Trainings calendar
+    .js-calendar{ id: "user_#{@user.id}" }
+    %br
+    = render 'color_info'
