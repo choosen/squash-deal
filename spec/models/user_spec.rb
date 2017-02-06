@@ -50,6 +50,14 @@ RSpec.describe User, type: :model do
     it 'is confirmed' do
       expect(subject.confirmed?).to eq true
     end
+
+    context 'when email in params is missing' do
+      let(:params) { { multisport: true } }
+
+      it 'is not persisted' do
+        expect(subject.persisted?).to eq false
+      end
+    end
   end
 
   describe '#from_omniauth' do

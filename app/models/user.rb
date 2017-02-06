@@ -10,9 +10,10 @@ class User < ApplicationRecord
   has_many :owned_trainings, class_name: 'Training', foreign_key: 'owner_id',
                              dependent: :nullify
   has_many :users_trainings, dependent: :destroy
+  validates :email, presence: true
 
   def set_name_if_blank
-    self.name = email&.split('@').first.titleize if name.blank?
+    self.name = email.split('@').first.titleize if name.blank?
   end
 
   def display_name

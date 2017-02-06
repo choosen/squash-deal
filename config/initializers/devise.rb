@@ -135,13 +135,7 @@ Devise.setup do |config|
   # config.invite_key = {:email => /\A[^@]+@[^@]+\z/}
   # config.invite_key = {:email => /\A[^@]+@[^@]+\z/, :username => nil}
 
-  # Flag that force a record to be valid before being actually invited
-  # Default: false
   # config.validate_on_invite = true
-
-  # Resend invitation if user with invited status is invited again
-  # Default: true
-  # config.resend_invitation = false
 
   # The class name of the inviting model. If this is nil,
   # the #invited_by association is declared to be polymorphic.
