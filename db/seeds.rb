@@ -1,19 +1,12 @@
-def add_user(email, password)
-  @user = User.invite!(:email => email) do |u|
-    u.skip_invitation = true
-  end
-  token = Devise::VERSION >= "3.1.0" ? @user.instance_variable_get(:@raw_invitation_token) : @user.invitation_token
-  User.accept_invitation!(:invitation_token => token, :password => password, :password_confirmation => password)
+admin = User.create_without_invite(email: 'admin@sample.com',
+                                   password: '12345678', admin: true)
 
-  puts "Created User #{email} with password #{password}"
-  @user
-end
+fail 'Admin not created' unless admin.persisted?
 
-admin = add_user('admin@sample.com', "12345678")
-admin.admin = true
-admin.save
+player = User.create_without_invite(email: 'player@sample.com',
+                                    password: '12345678')
 
-player = add_user('player@sample.com', '12345678')
-
-training = Training.create(date: DateTime.now, price: 120.00)
+fail 'Player not created' unless player.persisted?
+training = Training.create!(date: DateTime.now + 1.day, price: 120.00,
+                            owner: player)
 training.users << player

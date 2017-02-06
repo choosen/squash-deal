@@ -1,7 +1,8 @@
 class Users::TrainingsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_users_training, only: [:update]
-  load_and_authorize_resource
+  authorize_resource class: 'UsersTraining', except: [:create]
+  before_action :authorize_create, only: [:create]
 
   def index
     @users_trainings = UsersTraining.includes(:training).where(
@@ -40,5 +41,10 @@ class Users::TrainingsController < ApplicationController
   def users_training_params
     params.require(:users_training).permit(:user_id, :training_id,
                                            :attended, :multisport_used)
+  end
+
+  def authorize_create
+    training = Training.find_by(id: params[:users_training][:training_id])
+    authorize!(:invite_to_training, training)
   end
 end
