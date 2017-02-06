@@ -35,6 +35,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap-sass'
+gem 'bootstrap3-datetimepicker-rails'
 gem 'cancancan'
 gem 'composite_primary_keys'
 gem 'devise'

@@ -14,3 +14,12 @@ $(document).on 'turbolinks:load', ->
     $(".calendar").fullCalendar(
       events: '/trainings.json'
     )
+
+$(document).on 'turbolinks:load', ->
+  $('#datetimepicker2').datetimepicker({
+    inline: true,
+    stepping: 10,
+    sideBySide: false,
+    format: 'DD.MM.YYYY HH:mm'
+    minDate: new Date()
+  })
