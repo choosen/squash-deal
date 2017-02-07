@@ -20,7 +20,6 @@ class Users::TrainingsController < ApplicationController
   end
 
   def update
-    # authorize!(:update, @users_training)
     @users_training&.assign_attributes(users_training_params)
     if @users_training&.changed? && @users_training.save
       training = @users_training.training
