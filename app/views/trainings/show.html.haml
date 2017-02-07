@@ -27,7 +27,7 @@
             %th Multi
             %th Action
         %tbody
-          = render partial: 'trainings/users_training',
+          = render partial: 'trainings/users_training_done',
             collection: @users_trainings_attended, as: :users_training,
             locals: { attended: true }
       %h3 Absences
@@ -37,7 +37,7 @@
             %th Player
             %th Action
         %tbody
-          = render partial: 'trainings/users_training',
+          = render partial: 'trainings/users_training_done',
             collection: @users_trainings_not_attended, as: :users_training,
             locals: { attended: false }
     - else
@@ -49,5 +49,6 @@
         %thead
           %tr
             %th Player
+            %th Action
         %tbody
           = render @users
