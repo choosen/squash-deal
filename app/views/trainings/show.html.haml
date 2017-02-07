@@ -28,8 +28,7 @@
             %th Action
         %tbody
           = render partial: 'trainings/users_training_done',
-            collection: @users_trainings_attended, as: :users_training,
-            locals: { attended: true }
+            collection: @users_trainings_attended, as: :users_training
       %h3 Absences
       %table.table
         %thead
@@ -38,8 +37,7 @@
             %th Action
         %tbody
           = render partial: 'trainings/users_training_done',
-            collection: @users_trainings_not_attended, as: :users_training,
-            locals: { attended: false }
+            collection: @users_trainings_not_attended, as: :users_training
     - else
       - if can? :update, @training
         = link_to 'Invite user to training', invite_training_path(@training),
