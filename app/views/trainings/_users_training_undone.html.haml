@@ -1,0 +1,16 @@
+%tr
+  %td= users_training.user.display_name
+  %td.text-success= formatted_ut_accepted_at(users_training)
+  %td.text-danger= 'x' unless users_training.attended?
+  %td
+    - if can?(:update, users_training) && !users_training.training.finished?
+      .btn-group
+        -# = link_to attended ? 'Set as absence' : 'Set as present',
+        -#     user_training_path(users_training.user_id, users_training.training_id,
+        -#     users_training: { attended: !attended }),
+        -#     method: :put, class: 'btn btn-default'
+        -# - if attended
+        -#   = link_to users_training.multisport_used? ? 'Set as no paid' : 'Set as multisport used',
+        -#     user_training_path(users_training.user_id, users_training.training_id,
+        -#     users_training: { multisport_used: !users_training.multisport_used }),
+        -#     method: :put, class: 'btn btn-default'
