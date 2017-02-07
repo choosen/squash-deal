@@ -6,6 +6,9 @@ class Ability
     return unless user
     if user.admin?
       can :manage, :all
+      cannot :reaction_to_invite, UsersTraining do |users_training|
+        users_training.user.id != user.id
+      end
     else
       define_user_priviliges(user)
     end
@@ -19,6 +22,7 @@ class Ability
     can :create, Training
     can :manage, Training, owner: user
     can :update, UsersTraining, training: { owner: user }
+    can :reaction_to_invite, Training
     can :reaction_to_invite, UsersTraining, user: user
   end
 end

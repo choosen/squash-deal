@@ -5,6 +5,8 @@ RSpec.describe Ability do
   describe 'abilities' do
     let(:user) { nil }
     let(:expected) { RSpec::Expectations::ExpectationNotMetError }
+    let(:other_user_training_ut) { create(:users_training) }
+    let(:other_user_training) { other_user_training_ut.training }
 
     subject(:ability) { Ability.new(user) }
 
@@ -16,12 +18,15 @@ RSpec.describe Ability do
       let(:user) { create(:admin) }
 
       it { is_expected.to be_able_to(:manage, :all) }
+      it do
+        # binding.pry
+        is_expected.not_to be_able_to(:reaction_to_invite,
+                                      other_user_training_ut)
+      end
     end
 
     context 'when user is player' do
       let(:user) { create(:user) }
-      let(:other_user_training_ut) { create(:users_training) }
-      let(:other_user_training) { other_user_training_ut.training }
       let(:other_user) { create(:user) }
       let(:owned_training_ut) { create(:users_training, user: user) }
       let(:owned_training) { owned_training_ut.training }
@@ -43,15 +48,16 @@ RSpec.describe Ability do
         it { is_expected.to be_able_to(:update, owned_training_ut) }
       end
 
-      context 'when users_training belong to him' do
+      context 'when users_training belong to other user' do
         it do
           is_expected.not_to be_able_to(:reaction_to_invite,
                                         other_user_training_ut)
         end
       end
 
-      context 'when users_training belong to other user' do
+      context 'when users_training belong to him' do
         it { is_expected.to be_able_to(:reaction_to_invite, owned_training_ut) }
+        it { is_expected.to be_able_to(:reaction_to_invite, owned_training) }
       end
     end
   end
