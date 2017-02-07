@@ -242,7 +242,6 @@ RSpec.describe TrainingsController, type: :controller do
 
     it 'flashes success' do
       subject
-
       expect(controller).to set_flash[:success]
     end
 

@@ -19,7 +19,6 @@ RSpec.describe Ability do
 
       it { is_expected.to be_able_to(:manage, :all) }
       it do
-        # binding.pry
         is_expected.not_to be_able_to(:reaction_to_invite,
                                       other_user_training_ut)
       end

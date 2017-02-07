@@ -1,7 +1,7 @@
 FactoryGirl.define do
   factory :users_training do
     user
-    association :training, factory: :training
+    training
     attended false
 
     trait :attended do
