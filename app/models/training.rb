@@ -9,12 +9,13 @@ class Training < ApplicationRecord
   validates :price, allow_nil: true, numericality: { greater_than: 0.0 }
   validate :date_cannot_be_change_to_the_past
   validate :finished_cannot_be_changed, on: :update
+  validate :cannot_finish_until_done
 
   scope :date_between,
         ->(start, end_d) { where('date >= ? AND date <= ?', start, end_d) }
 
   def done?
-    date < DateTime.current
+    date.past?
   end
 
   def price_per_user
@@ -24,13 +25,23 @@ class Training < ApplicationRecord
     price / number_of_present
   end
 
+  private
+
   def date_cannot_be_change_to_the_past
     return if date.nil? || !date_changed? || date.future?
     errors.add(:date, 'Training date must be in the future')
   end
 
   def finished_cannot_be_changed
-    return if !persisted? || !finished_was
+    return unless persisted?
+    return unless finished_was
     errors.add(:base, 'Training cannot be changed after finishing')
+  end
+
+  def cannot_finish_until_done
+    return if date.nil?
+    return if done?
+    return unless finished
+    errors.add(:finished, 'Can not finish training until it is done')
   end
 end

@@ -228,7 +228,10 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #close' do
     let(:ut) do
-      create(:users_training, attended: true, user: controller.current_user)
+      ut = create(:users_training, attended: true,
+                                   user: controller.current_user)
+      ut.training.update_attribute('date', DateTime.current - 3.days)
+      ut
     end
 
     subject { put :close, params: { id: ut.training.to_param } }
@@ -239,6 +242,7 @@ RSpec.describe TrainingsController, type: :controller do
 
     it 'flashes success' do
       subject
+
       expect(controller).to set_flash[:success]
     end
 

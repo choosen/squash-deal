@@ -70,7 +70,7 @@ RSpec.describe Training, type: :model do
     end
 
     context 'when date is in past' do
-      let(:training) { build(:training, date: DateTime.current - 2.days) }
+      let(:training) { create_without_validate(:training, :from_yesterday) }
 
       it 'returns true' do
         expect(subject).to eq true
@@ -96,6 +96,7 @@ RSpec.describe Training, type: :model do
       context 'when date was set in the past' do
         context 'when we change price' do
           it 'validates as true' do
+            expect(subject).to be_valid
             expect { subject.price += 1 }.not_to change { subject.valid? }
           end
         end
@@ -105,13 +106,31 @@ RSpec.describe Training, type: :model do
     describe '#finished_cannot_be_changed' do
       context 'when we change price' do
         context 'when training is finished' do
-          let(:training) { create(:training, finished: true) }
+          let(:training) { build(:training, :from_yesterday) }
 
           it { is_expected.to be_invalid }
         end
 
         context 'when training is open' do
           it { is_expected.to be_valid }
+        end
+      end
+    end
+
+    describe '#cannot_finish_until_done' do
+      context 'when training is in the past' do
+        let(:training) { create_without_validate(:training, :from_yesterday) }
+
+        it 'is valid to set as finished' do
+          expect(subject).to be_valid
+          expect { subject.finished = true }.not_to change { subject.valid? }
+        end
+      end
+
+      context 'when training is in future' do
+        it 'is invalid to set as finished' do
+          expect { subject.finished = true }.
+            to change { subject.valid? }.from(true).to(false)
         end
       end
     end
