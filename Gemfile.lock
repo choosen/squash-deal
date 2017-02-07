@@ -58,6 +58,7 @@ GEM
       momentjs-rails (>= 2.8.1)
     builder (3.2.2)
     byebug (9.0.6)
+    callsite (0.0.11)
     cancancan (1.15.0)
     coderay (1.1.1)
     coffee-rails (4.2.1)
@@ -138,6 +139,10 @@ GEM
       nokogiri (>= 1.5.9)
     mail (2.6.4)
       mime-types (>= 1.16, < 4)
+    meta_request (0.4.0)
+      callsite (~> 0.0, >= 0.0.11)
+      rack-contrib (~> 1.1)
+      railties (>= 3.0.0, < 5.1.0)
     method_source (0.8.2)
     mime-types (3.1)
       mime-types-data (~> 3.2015)
@@ -188,6 +193,8 @@ GEM
     public_suffix (2.0.5)
     puma (3.6.2)
     rack (2.0.1)
+    rack-contrib (1.2.0)
+      rack (>= 0.9.1)
     rack-protection (1.5.3)
       rack
     rack-test (0.6.3)
@@ -335,6 +342,7 @@ DEPENDENCIES
   jquery-rails
   letter_opener
   listen (~> 3.0.5)
+  meta_request
   momentjs-rails
   omniauth-google-oauth2
   pg (~> 0.18)
