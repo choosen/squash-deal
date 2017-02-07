@@ -48,8 +48,7 @@ RSpec.describe Training, type: :model do
       context 'when 2 of them attended' do
         before(:each) do
           @training = create(:training_with_users)
-          @training.users_trainings.
-            first(2).each { |ut| ut.update(attended: true) }
+          @training.users_trainings.last.update(attended: false)
         end
 
         subject { @training.price_per_user }
