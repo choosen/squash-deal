@@ -41,7 +41,7 @@ class UsersTraining < ApplicationRecord
   end
 
   def cannot_change_finished_training
-    return if training.nil? || !training.finished
+    return if training.nil? || !training.finished?
     errors.add(:base, 'You cannot changed already finished trainings')
   end
 
