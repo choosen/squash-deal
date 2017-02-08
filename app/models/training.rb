@@ -15,7 +15,7 @@ class Training < ApplicationRecord
         ->(start, end_d) { where('date >= ? AND date <= ?', start, end_d) }
 
   def done?
-    date.past?
+    (date + 1.hour).past?
   end
 
   def price_per_user

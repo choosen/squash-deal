@@ -28,10 +28,11 @@ class Ability
     can :read, :all
     can :manage, User, id: user.id
     can :create, Training
-    can :manage, Training, owner_id: user.id, finished: false
+    can :manage, Training, owner_id: user.id
     can :update, UsersTraining, training: { owner_id: user.id, done?: true }
     can :update, UsersTraining, user_id: user.id, training: { done?: false }
-    can :reaction_to_invite, Training, finished: false
-    can :reaction_to_invite, UsersTraining, user_id: user.id
+    can :reaction_to_invite, Training, done?: false
+    can :reaction_to_invite, UsersTraining, user_id: user.id,
+                                            training: { done?: false }
   end
 end
