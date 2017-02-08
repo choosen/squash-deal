@@ -2,15 +2,7 @@
 .row
   .col-md-4.col-md-offset-1
     %h3 Basics
-    %p
-      %b Owner:
-      = @training.owner.display_name
-    %p
-      %b Date:
-      = l @training.date
-    %p
-      %b Price:
-      = @training.price
+    = render @training
     %br
     - if can? :update, @training
       = render 'admin_actions_on_training'
@@ -21,37 +13,36 @@
         %p Training is finished. All players got his payments reminders.
       - elsif can?(:update, @training)
         = render 'admin_main_actions_on_unfinished'
-      %h3 Present players
-      %table.table
-        %thead
-          %tr
-            %th Player
-            %th Multi
-            %th Action
-        %tbody
-          = render partial: 'trainings/users_training_done',
-            collection: @users_trainings_attended, as: :users_training
-      %h3 Absences
-      %table.table
-        %thead
-          %tr
-            %th Player
-            %th Action
-        %tbody
-          = render partial: 'trainings/users_training_done',
-            collection: @users_trainings_not_attended, as: :users_training
-    - else
-      - if can? :update, @training
-        = link_to 'Invite user to training', invite_training_path(@training),
-          class: 'btn btn-default'
-      %h2 Invited/Accepted players
-      %table.table.table-hover.table-condensed
-        %thead
-          %tr
-            %th Player
-            %th Accepted?
-            %th Dismissed?
-            %th Actions
-        %tbody
-          = render partial: 'trainings/users_training_undone',
-            collection: @users_trainings, as: :users_training
+    - elsif can? :update, @training
+      = link_to 'Invite user to training', invite_training_path(@training),
+      class: 'btn btn-default'
+    %h3
+      = @training.done? ? 'Present' : 'Accepted'
+      players
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Player
+          %th Multi
+          %th Action
+      %tbody
+        = render partial: 'trainings/users_training_done',
+          collection: @users_trainings_attended, as: :users_training
+    %h3= @training.done? ? 'Absences' : 'Dismissed'
+    %table.table.table-hover
+      %thead
+        %tr
+          %th Player
+          %th Action
+      %tbody
+        = render partial: 'trainings/users_training_done',
+          collection: @users_trainings_not_attended, as: :users_training
+    %h3 Invited and not accepted players
+    %table.table.table-hover.table-condensed
+      %thead
+        %tr
+          %th Player
+          %th Invited at
+      %tbody
+        = render partial: 'trainings/users_training_unaccepted',
+          collection: @users_training_unaccepted, as: :users_training_unaccepted
