@@ -17,8 +17,10 @@
 
   .col-md-6
     - if @training.done?
-      - if can?(:update, @training) && !@training.finished?
-        = render 'admin_main_actions_on_finished'
+      - if @training.finished?
+        %p Training is finished. All players got his payments reminders.
+      - elsif can?(:update, @training)
+        = render 'admin_main_actions_on_unfinished'
       %h3 Present players
       %table.table
         %thead
