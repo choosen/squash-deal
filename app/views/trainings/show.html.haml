@@ -4,7 +4,7 @@
     %h3 Basics
     = render @training
     %br
-    - if can? :update, @training
+    - if can?(:update, @training) # && @training.finished?
       = render 'admin_actions_on_training'
 
   .col-md-6
