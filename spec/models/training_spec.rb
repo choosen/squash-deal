@@ -135,4 +135,18 @@ RSpec.describe Training, type: :model do
       end
     end
   end
+
+  describe '#assign_owner_to_training' do
+    context 'after create user' do
+      it 'assigns owner with training' do
+        expect { subject.save }.to change { subject.users.count }
+      end
+
+      it 'does not assign again owner on training change' do
+        subject.save
+        expect { subject.update(price: 3453) }.
+          not_to change { subject.users.count }
+      end
+    end
+  end
 end

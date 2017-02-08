@@ -1,5 +1,6 @@
 # Training info
 class Training < ApplicationRecord
+  after_create :assign_owner_to_training
   has_many :users, through: :users_trainings
   has_many :users_trainings, dependent: :destroy
   belongs_to :owner, class_name: 'User'
@@ -43,5 +44,9 @@ class Training < ApplicationRecord
     return if done?
     return unless finished
     errors.add(:finished, 'Can not finish training until it is done')
+  end
+
+  def assign_owner_to_training
+    UsersTraining.create(user: owner, training_id: id)
   end
 end

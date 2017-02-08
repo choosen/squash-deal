@@ -9,17 +9,9 @@ FactoryGirl.define do
     end
   end
 
-  factory :training_with_user, parent: :training do
-    transient { user { create(:user) } }
-
-    after(:create) do |training, evaluator|
-      training.users << evaluator.user
-    end
-  end
-
   factory :training_with_users, parent: :training do
     transient do
-      users_count 3
+      users_count 2
     end
 
     after(:create) do |training, evaluator|

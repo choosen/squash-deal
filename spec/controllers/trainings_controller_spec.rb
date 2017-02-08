@@ -161,6 +161,7 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'reactions for invitation:' do
     context 'when params are invalid' do
+      let(:training) { create(:training, owner: create(:user)) }
       let(:invalid_params) { { id: training.to_param } }
 
       describe 'GET #invitation_accept' do
