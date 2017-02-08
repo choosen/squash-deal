@@ -47,6 +47,7 @@ class Training < ApplicationRecord
   end
 
   def assign_owner_to_training
-    UsersTraining.create(user: owner, training_id: id)
+    UsersTraining.create(user: owner, training_id: id,
+                         accepted_at: DateTime.current)
   end
 end
