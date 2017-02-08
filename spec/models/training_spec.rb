@@ -142,6 +142,11 @@ RSpec.describe Training, type: :model do
         expect { subject.save }.to change { subject.users.count }
       end
 
+      it 'assigns owner with autoaccepted state' do
+        subject.save
+        expect(subject.users.first).to be_truthy
+      end
+
       it 'does not assign again owner on training change' do
         subject.save
         expect { subject.update(price: 3453) }.
