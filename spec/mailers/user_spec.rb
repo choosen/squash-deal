@@ -2,7 +2,7 @@ require 'rails_helper'
 include ActiveJob::TestHelper
 
 RSpec.describe UserMailer, type: :mailer do
-  let(:training) { create(:training_with_user) }
+  let(:training) { create(:training) }
   let(:user_t) { training.users_trainings.first }
 
   describe '#training_invitation and ActiveJob mailers queue' do
