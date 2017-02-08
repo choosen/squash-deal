@@ -94,47 +94,68 @@ RSpec.describe UsersTraining, type: :model do
       end
     end
 
-    describe 'change of accepted_at' do
-      context 'when accepted_at is set' do
-        let(:users_training) { create(:users_training, accepted_at: today) }
+    describe '#accepted_at_not_changed' do
+      context 'change of accepted_at' do
+        context 'when accepted_at is set' do
+          let(:users_training) { create(:users_training, accepted_at: today) }
 
-        it 'is not valid' do
-          expect { subject.accepted_at += 1.day }.to change { subject.valid? }.
-            from(true).to false
+          it 'is not valid' do
+            expect { subject.accepted_at += 1.day }.
+              to change { subject.valid? }.from(true).to false
+          end
         end
-      end
 
-      context 'when accepted_at is nil' do
-        it 'is valid' do
-          expect { subject.accepted_at = today }.
-            not_to change { subject.valid? }
+        context 'when accepted_at is nil' do
+          it 'is valid' do
+            expect { subject.accepted_at = today }.
+              not_to change { subject.valid? }
+          end
         end
       end
     end
 
-    describe 'set accepted_at' do
-      context 'when training end date is in the past' do
-        it 'is not valid' do
-          expect { subject.training.date = today - 1.month }.
-            to change { subject.valid? }.from(true).to false
+    describe '#accepted_at_before_training' do
+      context 'set accepted_at' do
+        context 'when training end date is in the past' do
+          it 'is not valid' do
+            expect { subject.training.date = today - 1.month }.
+              to change { subject.valid? }.from(true).to false
+          end
         end
-      end
 
-      context 'when training end date is in the future' do
-        it { is_expected.to be_valid }
+        context 'when training end date is in the future' do
+          it { is_expected.to be_valid }
+        end
       end
     end
 
-    describe 'Invite user to training' do
-      context 'when training is in the future' do
-        it { is_expected.to be_valid }
-      end
-
-      context 'when training is in the past' do
-        it 'is not valid' do
-          expect { subject.training.date = today - 1.month }.
-            to change { subject.valid? }.from(true).to(false)
+    describe '#cannot_create_before_training_date' do
+      context 'Invite user to training' do
+        context 'when training is in the future' do
+          it { is_expected.to be_valid }
         end
+
+        context 'when training is in the past' do
+          it 'is not valid' do
+            expect { subject.training.date = today - 1.month }.
+              to change { subject.valid? }.from(true).to(false)
+          end
+        end
+      end
+    end
+
+    describe '#cannot_change_finished_training' do
+      context 'when training is finished' do
+        let(:users_training) { create(:users_training) }
+
+        before(:each) do
+          users_training.training.update(finished: true)
+        end
+
+        it { is_expected.to be_invalid }
+      end
+      context 'when training is not finished' do
+        it { is_expected.to be_valid }
       end
     end
   end

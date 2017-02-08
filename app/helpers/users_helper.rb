@@ -1,5 +1,6 @@
 module UsersHelper
   def formatted_user_name(user)
-    user.name || 'missing'
+    return 'missing' if user.name.blank?
+    user.name
   end
 end

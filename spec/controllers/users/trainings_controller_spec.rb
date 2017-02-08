@@ -13,12 +13,10 @@ RSpec.describe Users::TrainingsController, type: :controller do
   end
 
   describe 'POST #create' do
-    let(:users_training) do
-      FactoryGirl.build(:users_training, user: controller.current_user)
+    let!(:training) do
+      create(:training, owner: controller.current_user)
     end
-    let(:valid_params) do
-      users_training.attributes.slice('user_id', 'training_id').symbolize_keys
-    end
+    let(:valid_params) { { user_id: user, training_id: training.id } }
     let(:wrong_params) { valid_params.slice(:user_id) }
 
     context 'with valid params' do

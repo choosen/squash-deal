@@ -59,6 +59,7 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'ffaker'
+  gem 'meta_request'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'pry-rescue'
