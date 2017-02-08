@@ -14,9 +14,10 @@ class TrainingsController < ApplicationController
   end
 
   def show
-    return @users = @training.users unless @training.done?
+    users_training_accepted, @users_training_unaccepted =
+      @training.users_trainings.includes(:user).partition(&:accepted?)
     @users_trainings_attended, @users_trainings_not_attended =
-      @training.users_trainings.includes(:user).partition(&:attended)
+      users_training_accepted.partition(&:attended)
   end
 
   def create

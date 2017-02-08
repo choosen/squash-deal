@@ -161,6 +161,7 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'reactions for invitation:' do
     context 'when params are invalid' do
+      let(:training) { create(:training, owner: create(:user)) }
       let(:invalid_params) { { id: training.to_param } }
 
       describe 'GET #invitation_accept' do
@@ -228,7 +229,10 @@ RSpec.describe TrainingsController, type: :controller do
 
   describe 'PUT #close' do
     let(:ut) do
-      create(:users_training, attended: true, user: controller.current_user)
+      ut = create(:users_training, attended: true,
+                                   user: controller.current_user)
+      ut.training.update_attribute('date', DateTime.current - 3.days)
+      ut
     end
 
     subject { put :close, params: { id: ut.training.to_param } }

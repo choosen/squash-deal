@@ -4,20 +4,14 @@ FactoryGirl.define do
     price '120.00'
     association :owner, factory: :user
 
-    factory :training_with_user do
-      transient do
-        user { create(:user) }
-      end
-
-      after(:create) do |training, evaluator|
-        training.users << evaluator.user
-      end
+    trait :from_yesterday do
+      date DateTime.current.yesterday
     end
   end
 
   factory :training_with_users, parent: :training do
     transient do
-      users_count 3
+      users_count 2
     end
 
     after(:create) do |training, evaluator|
