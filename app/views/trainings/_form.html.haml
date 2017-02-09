@@ -1,14 +1,11 @@
-= simple_form_for(@training) do |f|
-  = f.error_notification
+.panel.panel-default
+  .panel-body
+    = simple_form_for(@training) do |f|
+      = f.error_notification
 
-  .form-inputs
-    .form-group
-      = f.label :date
-      .input-group.date.js-datetimepicker
-        = f.input_field :date, as: :string, class: 'form-control', value: format_picker_date(f.object)
-        %span.input-group-addon
-          %span.glyphicon.glyphicon-calendar
-    = f.input :price, input_html: { value: f.object.price || 55.00 }
+      .form-inputs
+        = f.input :date, as: :string, input_html: { class: 'js-datetimepicker', value: format_picker_date(f.object) }
+        = f.input :price, input_html: { value: f.object.price || 55.00 }
 
-  .form-actions
-    = f.button :submit
+      .form-actions
+        = f.button :submit

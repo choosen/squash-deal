@@ -6,4 +6,5 @@ en:
   time:
     formats:
       default: "%d.%m.%Y %H:%M"
+      datetimepicker: "%d.%m.%Y %H:%M"
       time: "%H:%M"

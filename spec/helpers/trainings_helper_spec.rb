@@ -31,7 +31,7 @@ RSpec.describe TrainingsHelper, type: :helper do
 
       subject { helper.format_picker_date(training) }
 
-      it { is_expected.to eq I18n.l(DateTime.current, format: :default) }
+      it { is_expected.to eq I18n.l(DateTime.current, format: :datetimepicker) }
     end
 
     context 'when date is filled' do
@@ -39,7 +39,7 @@ RSpec.describe TrainingsHelper, type: :helper do
 
       subject { helper.format_picker_date(training) }
 
-      it { is_expected.to eq I18n.l(training.date, format: :default) }
+      it { is_expected.to eq I18n.l(training.date, format: :datetimepicker) }
     end
   end
 end

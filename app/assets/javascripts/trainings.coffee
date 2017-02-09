@@ -17,9 +17,15 @@ $(document).on 'turbolinks:load', ->
 
 $(document).on 'turbolinks:load', ->
   $('.js-datetimepicker').datetimepicker({
-    inline: true,
-    stepping: 10,
+    inline: false,
+    stepping: 5,
     sideBySide: false,
     format: 'DD.MM.YYYY HH:mm'
-    minDate: new Date()
+    minDate: new Date(),
+    # maxDate: new Date().setFullYear(new Date().getFullYear() + 1),
+    # keepOpen: false, # not in datetime
+    keepInvalid: true,
+    focusOnShow: true,
+    collapse: true,
+    showClose: true, # not @ datetime
   })

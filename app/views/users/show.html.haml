@@ -1,26 +1,27 @@
 %h1= @user.display_name
 
 .row
-  .col-md-6.col-md-offset-1
-    %table.table.table-condensed.table-hover
-      %thead
-        %tr
-          %th
-            E-mail
-          %th
-            Multisport
-      %tbody
-        %tr
-          %td
-            = @user.email
-          %td
-            = @user.multisport
-    - if can? :edit, @user
-      .btn-group
-        = link_to 'New Training', new_training_path, class: 'btn btn-default'
-        = link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
-        = link_to 'Back', users_path, class: 'btn btn-default'
-    %h2 Trainings calendar
-    .js-calendar{ id: "user_#{@user.id}" }
+  .col-md-3.col-md-offset-1
+    .well
+      %h3 Basics
+      %p
+        %strong E-mail:
+        = @user.email
+      %p
+        %strong Multisport:
+        = @user.multisport
+      - if can? :edit, @user
+        .btn-group
+          = link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
+          = link_to 'Back', users_path, class: 'btn btn-default'
+  .col-md-8.col-md-offset-0
+    = link_to 'New Training', new_training_path, class: 'btn btn-default'
     %br
-    = render 'color_info'
+    %br
+    .panel.panel-default
+      .panel-heading
+        %h4= "#{@user.display_name} trainings calendar"
+      .panel-body
+        .js-calendar{ id: "user_#{@user.id}" }
+        %br
+        = render 'color_info'

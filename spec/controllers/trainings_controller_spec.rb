@@ -141,20 +141,38 @@ RSpec.describe TrainingsController, type: :controller do
   describe 'GET #invite' do
     subject { get :invite, params: { id: training.to_param } }
 
-    context 'to owned training' do
-      it 'displays invite to training form' do
+    context 'when there are no others players to invite' do
+      it 'expect there is no other players to invite' do
+        expect(User.count).to eq 1
+      end
+
+      it 'redirects to training and flashes notice' do
         subject
-        expect(response).to have_http_status(:success)
+        expect(controller).to redirect_to training
+        expect(controller).to set_flash[:notice]
       end
     end
 
-    context 'to not owned training' do
-      let(:training) { create(:training) }
+    context 'when there are players to invite' do
+      before(:each) do
+        create(:user)
+      end
 
-      it 'redirect_to root and flashes error' do
-        subject
-        expect(controller).to redirect_to root_path
-        expect(controller).to set_flash[:notice]
+      context 'to owned training' do
+        it 'displays invite to training form' do
+          subject
+          expect(response).to have_http_status(:success)
+        end
+      end
+
+      context 'to not owned training' do
+        let(:training) { create(:training) }
+
+        it 'redirects to root and flashes notice' do
+          subject
+          expect(controller).to redirect_to root_path
+          expect(controller).to set_flash[:notice]
+        end
       end
     end
   end
