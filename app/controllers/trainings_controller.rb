@@ -49,6 +49,9 @@ class TrainingsController < ApplicationController
 
   def invite
     @users_training = @training.users_trainings.new
+    @not_invited_users = User.not_invited_to_training(@training)
+    return if @not_invited_users.present?
+    redirect_to @training, flash: { notice: 'All already invited' }
   end
 
   def invitation_accept
