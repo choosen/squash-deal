@@ -3,7 +3,7 @@
 .row
   .col-md-3.col-md-offset-1
     .well
-      %h3 Basics
+      %h4 Basics
       %p
         %strong E-mail:
         = @user.email
@@ -14,6 +14,11 @@
         .btn-group
           = link_to 'Edit', edit_user_path(@user), class: 'btn btn-default'
           = link_to 'Back', users_path, class: 'btn btn-default'
+    .panel.panel-default
+      .panel-heading
+        %h4 Calendar legend
+      .panel-body
+        = render 'color_info'
   .col-md-8.col-md-offset-0
     = link_to 'New Training', new_training_path, class: 'btn btn-default'
     %br
@@ -23,5 +28,3 @@
         %h4 #{@user.display_name} trainings calendar
       .panel-body
         .js-calendar{ id: "user_#{@user.id}" }
-        %br
-        = render 'color_info'

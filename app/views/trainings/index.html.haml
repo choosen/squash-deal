@@ -1,6 +1,12 @@
 %h1 All trainings
 .row
-  .col-md-8.col-md-offset-2
+  .col-md-3.col-md-offset-1
+    .panel.panel-default
+      .panel-heading
+        %h4 Calendar legend
+      .panel-body
+        = render 'color_info'
+  .col-md-8.col-md-offset-0
     = link_to 'New Training', new_training_path, class: 'btn btn-default'
     %br
     %br
@@ -10,5 +16,3 @@
         %h4 All users trainings
       .panel-body
         .js-calendar
-        %br
-        = render 'color_info'
