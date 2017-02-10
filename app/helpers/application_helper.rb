@@ -18,4 +18,9 @@ module ApplicationHelper
   def class_string(msg_type)
     "alert #{bootstrap_class_for(msg_type)} fade in"
   end
+
+  def format_date_if_present(datetime)
+    return '' unless datetime.present?
+    l datetime, format: :default
+  end
 end
