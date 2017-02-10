@@ -10,15 +10,15 @@
 
   .col-md-7
     - if @training.done?
-      - if @training.finished?
-        %p Training is finished. All players got his payments reminders.
-      - elsif can?(:update, @training)
+      - if !@training.finished? && can?(:update, @training)
         = render 'admin_main_actions_on_unfinished'
+        %br
+        %br
     - elsif can? :update, @training
       = link_to 'Invite user to training', invite_training_path(@training),
       class: 'btn btn-default'
-    %br
-    %br
+      %br
+      %br
     .panel-group
       .panel.panel-default
         .panel-heading

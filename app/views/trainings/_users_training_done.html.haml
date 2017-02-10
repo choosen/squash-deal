@@ -4,7 +4,7 @@
   - if users_training.attended?
     %td
       - if users_training.multisport_used?
-        = image_tag('multisport.jpg', height: '32')
+        = image_tag('multisport.jpg', height: '22')
   %td
     - if can?(:update, users_training) && !users_training.training.finished?
       .btn-group
