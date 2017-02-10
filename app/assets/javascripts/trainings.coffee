@@ -9,10 +9,34 @@ $(document).on 'turbolinks:load', ->
   if (cdID != undefined)
     $(".js-calendar").fullCalendar(
       events: '/users/' + cdID.split("_")[1] + '/trainings.json'
+      timeFormat: 'HH:mm'
+      firstDay: 1
+      header: {
+        left: 'today prev,next'
+        center: 'title',
+        right: 'month,listYear'
+      }
+      buttonText: {
+        list: 'list year'
+      }
     )
   else
     $(".js-calendar").fullCalendar(
       events: '/trainings.json'
+      header: {
+        left: 'today prev,next',
+        center: 'title',
+        right: 'month,agendaWeek,agendaDay,listYear'
+      },
+      timeFormat: 'HH:mm'
+      slotLabelFormat: 'HH:mm'
+      minTime: '06:00:00'
+      maxTime: '23:00:00'
+      scrollTime: '08:00:00'
+      buttonText: {
+        list: 'list year'
+      }
+      firstDay: 1
     )
 
 $(document).on 'turbolinks:load', ->
