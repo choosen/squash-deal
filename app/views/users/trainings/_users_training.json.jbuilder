@@ -10,7 +10,7 @@ elsif users_training.training.done?
   json.url training_url(users_training.training, format: :html)
 else
   json.color 'DarkSalmon'
-  if current_user.id == users_training.user_id
+  if current_user.id == users_training.user_id && !users_training.training.done?
     json.url invitation_accept_training_url(users_training.training,
                                             format: :html)
   else
