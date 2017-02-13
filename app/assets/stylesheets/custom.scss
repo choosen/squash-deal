@@ -102,37 +102,6 @@ img {
   //display: none;
 }
 
-// footer
-
-footer {
-  border-top: 1px solid $gray-medium-light;
-  color: $three-seven;
-  margin-top: 45px;
-  padding-top: 5px;
-
-  a {
-    color: $gray;
-
-    &:hover {
-      color: $gray-darker;
-    }
-  }
-
-  small {
-    float: left;
-  }
-
-  ul {
-    float: right;
-    list-style: none;
-
-    li {
-      float: left;
-      margin-left: 15px;
-    }
-  }
-}
-
 // forms
 
 input,
@@ -170,4 +139,10 @@ input {
     overflow: auto;
     padding: 10px 0;
   }
+}
+
+// Debug info
+
+.debug_dump {
+  margin-bottom: 60px;
 }

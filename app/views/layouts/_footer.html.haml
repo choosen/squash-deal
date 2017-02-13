@@ -1,10 +1,11 @@
-%footer.footer
-  %small
-    = link_to 'Squash app', root_path
-    by
-    %a{ href: 'https://github.com/choosen' } Piotr Wasiak
-  %nav
-    %ul
+%nav.navbar.navbar-default.navbar-fixed-bottom
+  .container
+    .navbar-header
+      .navbar-brand
+        = link_to 'Squash deal', root_path
+        by
+        %a{ href: 'https://github.com/choosen' } Piotr Wasiak
+    %ul.nav.navbar-nav.navbar-right.list-inline
       %li= link_to 'Arena CTS calendar',
         'https://ctarena.cms.efitness.com.pl/kalendarz-zajec'
       %li= link_to 'PFS', 'http://pfs.com.pl/'
