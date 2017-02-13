@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @users = User.order(sort_column + ' ' + sort_direction)
+    @users = User.order([sort_column, sort_direction].join(' '))
   end
 
   def update
