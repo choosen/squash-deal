@@ -28,4 +28,15 @@ module ApplicationHelper
     { href: '#', 'data-trigger' => 'focus', 'data-placement' => 'bottom' }.
       merge(title: title, 'data-content' => text)
   end
+
+  def sortable(col, title = nil)
+    title ||= col.titleize
+    css_class = col == sort_column ? "sortable sortable_#{sort_direction}" : nil
+    direction = if col == sort_column && sort_direction == 'asc'
+                  'desc'
+                else
+                  'asc'
+                end
+    link_to title, { sort: col, direction: direction }, class: css_class
+  end
 end

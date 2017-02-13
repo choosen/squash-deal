@@ -128,16 +128,20 @@ input {
   }
 }
 
-// Users index
+// sortable column
 
-.users {
-  list-style: none;
-  margin: 0;
+.sortable {
+  background-position: right center;
+  background-repeat: no-repeat;
+  padding-right: 22px;
+  background-size: 20px 20px;
 
-  li {
-    border-bottom: 1px solid $gray-lighter;
-    overflow: auto;
-    padding: 10px 0;
+  &_asc {
+    background-image: image-url('up_arrow.png');
+  }
+
+  &_desc {
+    background-image: image-url('down_arrow.png');
   }
 }
 

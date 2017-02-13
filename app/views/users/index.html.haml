@@ -10,10 +10,10 @@
       %thead
         %tr
           %th Multi
-          %th Name
-          %th E-mail
-          %th Trainings
-          %th Accepted invite
+          %th= sortable 'name', 'Name'
+          %th= sortable 'email', 'E-mail'
+          %th= sortable 'trainings_count', 'Trainings'
+          %th= sortable 'invitation_accepted_at', 'Accepted invite'
 
       %tbody
         - @users.each do |user|
