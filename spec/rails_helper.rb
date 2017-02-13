@@ -20,6 +20,7 @@ end
 RSpec.configure do |config|
   config.include Requests::JsonHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :controller
+  config.include Features::SessionHelpers, type: :feature
   config.extend ControllerMacros, type: :controller
 
   config.use_transactional_fixtures = true
