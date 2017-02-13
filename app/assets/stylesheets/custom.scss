@@ -143,6 +143,8 @@ input {
 
 // Debug info
 
-.debug_dump {
-  margin-bottom: 60px;
+.debug {
+  &_dump {
+    margin-bottom: 60px;
+  }
 }
