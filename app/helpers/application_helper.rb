@@ -23,4 +23,9 @@ module ApplicationHelper
     return '' unless datetime.present?
     l datetime, format: :default
   end
+
+  def bottom_closed_on_focus_popover(title, text)
+    { href: '#', 'data-trigger' => 'focus', 'data-placement' => 'bottom' }.
+      merge(title: title, 'data-content' => text)
+  end
 end

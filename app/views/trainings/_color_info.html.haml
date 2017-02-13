@@ -1,4 +1,12 @@
 Trainings statuses:
 %ul
-  %li.text-success Finished
-  %li.text-danger Not finished yet
+  %li.text-success
+    Finished
+    %a.btn.js-popover{ bottom_closed_on_focus_popover('Finished', 'Training is finished, when the date of it is in the past and owner settled it') }
+      Info
+      .glyphicon.glyphicon-info-sign
+  %li.text-danger
+    Not finished yet
+    %a.btn.js-popover{ bottom_closed_on_focus_popover('Not finished yet', 'Training is not settled up yet') }
+      Info
+      .glyphicon.glyphicon-info-sign

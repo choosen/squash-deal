@@ -1,5 +1,18 @@
 Trainings statuses:
 %ul
-  %li.text-success Accepted
-  %li.text-warning Pending invitation
-  %li.text-danger Absence
+  %li.text-success
+    Accepted
+    %a.btn.js-popover{ bottom_closed_on_focus_popover('Accepted', 'You accepted invitation, if training was done then you was marked as present.') }
+      Info
+      .glyphicon.glyphicon-info-sign
+  %li.text-warning
+    Pending invitation
+    %a.btn.js-popover{ bottom_closed_on_focus_popover('Pending invitation',
+      'Training owner sent you an email invitation, which you didn\'t accepted. You can click at training on calendar to accept it.') }
+      Info
+      .glyphicon.glyphicon-info-sign
+  %li.text-danger
+    Absence
+    %a.btn.right.js-popover{ bottom_closed_on_focus_popover('Absence', 'You was marked as absence at training') }
+      Info
+      .glyphicon.glyphicon-info-sign

@@ -16,4 +16,22 @@ RSpec.describe ApplicationHelper, type: :helper do
       it { is_expected.to eq '' }
     end
   end
+
+  describe '#bottom_closed_on_focus_popover' do
+    let(:title) { 'Pending invitation' }
+    let(:text) do
+      'Training owner sent you an email invitation, which you didn\'t ' \
+      'accepted. You can click at training on calendar to accept it or ' \
+      'follow the link in email.'
+    end
+
+    subject { helper.bottom_closed_on_focus_popover(title, text) }
+
+    it 'return well formated attributes for popover' do
+      {
+        href: '#', 'data-trigger' => 'focus', 'data-placement' => 'bottom',
+        title: title, 'data-content' => text
+      }
+    end
+  end
 end

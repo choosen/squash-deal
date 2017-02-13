@@ -4,6 +4,9 @@
 
 $(document).on 'turbolinks:load', ->
 
+  $('.js-popover').popover().click (e) ->
+    e.preventDefault()
+
   return unless $(".js-calendar").length > 0
   cdID = $(".js-calendar").attr('id')
   $(".js-calendar").html ''
@@ -17,11 +20,11 @@ $(document).on 'turbolinks:load', ->
         center: 'title'
         right: 'month,listYear'
       buttonText: list: 'list year'
-      eventMouseover: (event) ->
+      eventRender: (event, element) ->
         if (event.color == 'DarkSalmon')
-          $(this).attr('title', 'Click to accept training invitation')
+          element.attr('title', 'Click to accept training invitation')
         else
-          $(this).attr('title', 'Click to view training')
+          element.attr('title', 'Click to view training')
     )
   else
     $(".js-calendar").fullCalendar(
@@ -38,8 +41,8 @@ $(document).on 'turbolinks:load', ->
       scrollTime: '08:00:00'
       buttonText: list: 'list year'
       firstDay: 1
-      eventMouseover: ->
-        $(this).attr('title', 'Click to view training')
+      eventAfterRender: (_event, element) ->
+        element.attr('title', 'Click to view training')
     )
 
 $(document).on 'turbolinks:load', ->
