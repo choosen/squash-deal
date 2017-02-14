@@ -35,6 +35,10 @@ textarea {
   }
 }
 
+.btn-group {
+  margin-bottom: 5px;
+}
+
 // typography
 
 h1,
@@ -95,11 +99,6 @@ p {
     color: $three-seven;
     text-decoration: none;
   }
-}
-
-
-img {
-  //display: none;
 }
 
 // forms
