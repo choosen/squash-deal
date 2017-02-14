@@ -1,23 +1,26 @@
 language: ruby
 rvm:
-  - 2.3.3
+- 2.3.3
 cache: bundler
 before_install:
-  - gem update --system
-bundler_args: --jobs=2 --without production
+- gem update --system
+bundler_args: "--jobs=2 --without production"
 script:
-  - bundle exec sidekiq -d -L /tmp/sidekiq.log
-  - sleep 1
-  - psql -c 'create database squashapp_test;' -U postgres
-  - bundle exec rake db:test:prepare
-  - bundle exec rake factory_girl:lint
-  - bundle exec rake spec
+- bundle exec sidekiq -d -L /tmp/sidekiq.log
+- sleep 1
+- psql -c 'create database squashapp_test;' -U postgres
+- bundle exec rake db:test:prepare
+- bundle exec rake factory_girl:lint
+- bundle exec rake spec
 services:
-  - postgresql
-  - redis-server
+- postgresql
+- redis-server
 addons:
-  postgresql: "9.6"
+  postgresql: '9.6'
 group: stable
 dist: trusty
 os: linux
 sudo: required
+notifications:
+  slack:
+    secure: ITeUpa6LLoClNMJ0joEGIp1BOxpGIgTv/PzgmdLX1Vctc2AuYR8eaB1jHPHxprGcpYcus3rFdPZVapYetKkHt0oQCDfM0jkTVIHBOk6GfwPvWpGrml5PVyzvXwVap4elY9F/oUfHfU4a4MEDxfM8fjCb7yq+sPaK9UgioUnUx9zCCY3crTr8so0nf6ion2b+/SoCqY+WmMJ+YGIH3+1Z/hxGFJBEs46qpy3PsxQ1vOWgsGNeu6kpsVpAnhwu+hF6j7ysyMd7CfDEMq4vUcah3/U6ZPJRTVu0O/Ht0LPwrC+ldCDq4wffqO9BTo3ExuIZDi2NMGxW9HashHPHLi2QMVDDm32zls2TbqfzWTvvuuGV9WUzHoZLT922pnCVffF2KT17IG8PYzyc59bIkayqLb49yuHak8ru6elUt9nbGKy6Fl36B0J3JnucBjZZKy0UpmFjwPXaTT6NYKRCTsIF2dbfMJLLHDq99tzlVVBS49a9F2jAtKbAW4V0CXc24GV+JXOt6t7AidnyM88/XggZKYwXzvV9o4+PuTMr1/M9Ibx50CLKj2JsXV8DcBes1r6dVT1VIx1VMLFg5g1vGDxESpW6IrxA9MB+3IV5y/EraErkp1J+jcgfedRLN5BarXm1BqvbK2b8c+CjhbLdvXAbCV97wCYusQlO+NPk2FyCYBI=
