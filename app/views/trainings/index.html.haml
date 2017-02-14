@@ -1,16 +1,18 @@
-%h1 All trainings
+%h1 Trainings
 .row
   .col-md-3.col-md-offset-1
+    .well
+      %h4 Basics
+      %p
+        %b All trainings count:
+        = Training.count
+      %p= link_to 'New Training', new_training_path, class: 'btn btn-default'
     .panel.panel-default
       .panel-heading
         %h4 Calendar legend
       .panel-body
         = render 'color_info'
   .col-md-8.col-md-offset-0
-    = link_to 'New Training', new_training_path, class: 'btn btn-default'
-    %br
-    %br
-
     .panel.panel-default
       .panel-heading
         %h4 All users trainings
