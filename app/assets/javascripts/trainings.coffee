@@ -41,7 +41,7 @@ $(document).on 'turbolinks:load', ->
       scrollTime: '08:00:00'
       buttonText: list: 'list year'
       firstDay: 1
-      eventAfterRender: (_event, element) ->
+      eventRender: (_event, element) ->
         element.attr('title', 'Click to view training')
     )
 
