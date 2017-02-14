@@ -1,21 +1,25 @@
-%header.navbar.navbar-fixed-top.navbar-inverse
-  .container
-    = link_to 'Squash deal', root_path, class: 'logo'
-    %nav
-      %ul.nav.navbar-nav.navbar-right
-        %li= link_to 'Home', root_path
-        - if user_signed_in?
-          %li= link_to 'Trainings', trainings_path
-          %li= link_to 'Users', users_path
-          %li.dropdown
-            %a.dropdown-toggle{ 'data-toggle' => 'dropdown', href: '#' }
-              Account
-              %b.caret
-            %ul.dropdown-menu
-              %li= link_to 'Profile', current_user
-              %li= link_to 'Settings', edit_user_path(current_user)
-              %li.divider
-              %li
-                = link_to 'Log out', destroy_user_session_path, method: 'delete'
-        - else
-          %li= link_to 'Log in', new_user_session_path
+%header
+  %nav.navbar.navbar-inverse.navbar-fixed-top
+    .container
+      .navbar-header
+        = link_to 'Squash deal', root_path, class: 'logo'
+        %button.navbar-toggle.collapsed{ 'data-toggle' => 'collapse', 'data-target' => '.navbar-collapse' }
+          .glyphicon.glyphicon-menu-hamburger
+      .collapse.navbar-collapse
+        %ul.nav.navbar-nav.navbar-right
+          %li= link_to 'Home', root_path
+          - if user_signed_in?
+            %li= link_to 'Trainings', trainings_path
+            %li= link_to 'Users', users_path
+            %li.dropdown
+              %a.dropdown-toggle{ 'data-toggle' => 'dropdown', href: '#' }
+                Account
+                %b.caret
+              %ul.dropdown-menu
+                %li= link_to 'Profile', current_user
+                %li= link_to 'Settings', edit_user_path(current_user)
+                %li.divider
+                %li
+                  = link_to 'Log out', destroy_user_session_path, method: 'delete'
+          - else
+            %li= link_to 'Log in', new_user_session_path
