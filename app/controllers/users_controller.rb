@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   helper_method :sort_column, :sort_direction
 
   before_action :authenticate_user!
-  load_and_authorize_resource
+  load_and_authorize_resource find_by: :id
 
   def index
     @users = User.order([sort_column, sort_direction].join(' '))

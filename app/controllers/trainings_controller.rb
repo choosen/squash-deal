@@ -1,6 +1,6 @@
 class TrainingsController < ApplicationController
   before_action :authenticate_user!
-  load_and_authorize_resource
+  load_and_authorize_resource find_by: :id
   before_action :set_user_training, only: [:invitation_accept,
                                            :invitation_remove]
 
