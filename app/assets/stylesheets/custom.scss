@@ -128,13 +128,18 @@ input {
   }
 }
 
+.submit {
+  @extend .btn;
+  @extend .btn-primary;
+}
+
 // sortable column
 
 .sortable {
   background-position: right center;
   background-repeat: no-repeat;
-  padding-right: 22px;
   background-size: 20px 20px;
+  padding-right: 22px;
 
   &_asc {
     background-image: image-url('up_arrow.png');
