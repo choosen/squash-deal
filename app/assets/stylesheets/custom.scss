@@ -35,6 +35,10 @@ textarea {
   }
 }
 
+.btn-group {
+  margin-bottom: 5px;
+}
+
 // typography
 
 h1,
@@ -97,11 +101,6 @@ p {
   }
 }
 
-
-img {
-  //display: none;
-}
-
 // forms
 
 input,
@@ -128,13 +127,18 @@ input {
   }
 }
 
+.submit {
+  @extend .btn;
+  @extend .btn-primary;
+}
+
 // sortable column
 
 .sortable {
   background-position: right center;
   background-repeat: no-repeat;
-  padding-right: 22px;
   background-size: 20px 20px;
+  padding-right: 22px;
 
   &_asc {
     background-image: image-url('up_arrow.png');
