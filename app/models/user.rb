@@ -11,6 +11,12 @@ class User < ApplicationRecord
                              dependent: :nullify
   has_many :users_trainings, dependent: :destroy
 
+  scope :not_invited_to_training, lambda { |training|
+    User.where('NOT EXISTS (SELECT 1 FROM "users_trainings" WHERE ' \
+    '("users"."id" = "users_trainings"."user_id" and ' \
+    '"users_trainings"."training_id" = ?) LIMIT 1)', training.id)
+  }
+
   def set_name_if_blank
     self.name = email.split('@').first.titleize if name.blank?
   end

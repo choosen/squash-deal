@@ -94,7 +94,20 @@ RSpec.describe Ability do
           end
 
           it { is_expected.to be_able_to(:update, @invitation) }
-          it { is_expected.to be_able_to(:reaction_to_invite, @invitation) }
+
+          context 'when invitation is accepted' do
+            before(:each) do
+              @invitation.update(accepted_at: DateTime.current)
+            end
+
+            it do
+              is_expected.not_to be_able_to(:reaction_to_invite, @invitation)
+            end
+          end
+
+          context 'when invitation is not accepted' do
+            it { is_expected.to be_able_to(:reaction_to_invite, @invitation) }
+          end
         end
       end
 

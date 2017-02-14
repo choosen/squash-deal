@@ -93,4 +93,13 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'scope not_invited_to_training' do
+    let(:user) { create(:user) }
+    let(:training) { create(:training) }
+
+    subject { User.not_invited_to_training(training) }
+
+    it { is_expected.to eq [user] }
+  end
 end

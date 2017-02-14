@@ -4,7 +4,7 @@
   - if users_training.attended?
     %td
       - if users_training.multisport_used?
-        = image_tag('multisport.jpg', height: '32')
+        = image_tag('multisport.jpg', height: '22')
   %td
     - if can?(:update, users_training) && !users_training.training.finished?
       .btn-group
@@ -13,7 +13,7 @@
             users_training: { attended: !users_training.attended? }),
             method: :put, class: 'btn btn-default'
         - if users_training.attended?
-          = link_to users_training.multisport_used? ? 'Set as no paid' : 'Set as multisport used',
+          = link_to users_training.multisport_used? ? 'Set as no multisport' : 'Set as multisport used',
             user_training_path(users_training.user_id, users_training.training_id,
             users_training: { multisport_used: !users_training.multisport_used }),
             method: :put, class: 'btn btn-default'
