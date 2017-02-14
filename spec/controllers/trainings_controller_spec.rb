@@ -233,13 +233,31 @@ RSpec.describe TrainingsController, type: :controller do
       describe 'GET #invitation_remove' do
         subject { get :invitation_remove, params: valid_params }
 
-        it 'flashes success' do
-          subject
-          expect(controller).to set_flash[:success]
+        context 'when invitation was not accepted' do
+          it 'flashes success' do
+            subject
+            expect(controller).to set_flash[:success]
+          end
+
+          it 'removes invitation' do
+            expect { subject }.to change { UsersTraining.count }.by(-1)
+          end
         end
 
-        it 'changes accepted_at of UsersTraining' do
-          expect { subject }.to change { UsersTraining.count }.by(-1)
+        context 'when invitation was already accepted' do
+          let!(:ut) do
+            create(:users_training, user: controller.current_user,
+                                    accepted_at: DateTime.current)
+          end
+
+          it 'flashes notice' do
+            subject
+            expect(controller).to set_flash[:notice]
+          end
+
+          it "doesn't remove invitation" do
+            expect { subject }.not_to change { UsersTraining.count }
+          end
         end
       end
     end
