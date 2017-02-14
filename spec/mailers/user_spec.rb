@@ -5,15 +5,16 @@ RSpec.describe UserMailer, type: :mailer do
   let(:training) { create(:training) }
   let(:user_t) { training.users_trainings.first }
 
+  ActiveJob::Base.queue_adapter = :test
+
   describe '#training_invitation and ActiveJob mailers queue' do
     subject { UserMailer.training_invitation(user_t).deliver_later }
 
     it 'creates a job' do
-      ActiveJob::Base.queue_adapter = :test
       expect { subject }.to have_enqueued_job.on_queue('mailers')
     end
 
-    it 'sends email' do
+    it 'sends email', perform_enqueued: true do
       expect { perform_enqueued_jobs { subject } }.
         to change { ActionMailer::Base.deliveries.size }.by(1)
     end

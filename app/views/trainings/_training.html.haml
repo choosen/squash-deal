@@ -7,3 +7,8 @@
 %p
   %b Price:
   = @training.price
+- if @training.finished?
+  %p
+    Training is
+    %b finished.
+    All players got his payments reminders.

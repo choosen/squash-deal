@@ -1,10 +1,12 @@
+%h1= t 'devise.invitations.new.header'
 .row
   .col-md-4.col-md-offset-4
-    %h2= t 'devise.invitations.new.header'
-    = simple_form_for resource, as: resource_name,
-                      url: invitation_path(resource_name),
-                      html: { method: :post } do |f|
-      = devise_error_messages!
-      - resource.class.invite_key_fields.each do |field|
-        = f.input field
-      = f.button :submit, t('devise.invitations.new.submit_button')
+    .panel.panel-default
+      .panel-body
+        = simple_form_for resource, as: resource_name, html: { method: :post },
+                                    url: invitation_path(resource_name) do |f|
+          = f.error_notification
+          - resource.class.invite_key_fields.each do |field|
+            = f.input field
+          = f.button :submit, t('devise.invitations.new.submit_button'), class: 'btn-primary'
+    = link_to 'Back to users', users_path, class: 'btn btn-default'
