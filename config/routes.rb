@@ -7,6 +7,7 @@ Rails.application.routes.draw do
 
   root to: 'home#index'
   get '/home', to: 'home#index'
+  get '/ttrpl', to: 'home#ttrpl'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks', invitations: 'users/invitations' }
 
