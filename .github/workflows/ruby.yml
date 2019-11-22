@@ -37,7 +37,7 @@ jobs:
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.6.2
+        ruby-version: 2.6.3
     - name: Build and Create DB and run specs
       env:
         RAILS_ENV: test
