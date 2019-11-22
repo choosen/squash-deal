@@ -46,7 +46,7 @@ jobs:
         REDIS_URL: http://localhost:${{ job.services.redis.ports[6379] }}
         ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
-        sudo apt-get install libpq-dev
+        sudo apt-get -y install libpq-dev
         gem install bundler --no-doc
         bundle install --jobs 4 --retry 3
         bin/rails db:prepare
