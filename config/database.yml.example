@@ -53,6 +53,7 @@ development:
 test:
   <<: *default
   database: squashapp_test
+  user: postgres
   port: <%= ENV['DATABASE_PORT'] %>
   host: <%= ENV['DATABASE_HOST'] %>
 
