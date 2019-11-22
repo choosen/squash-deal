@@ -46,7 +46,6 @@ jobs:
         REDIS_URL: http://localhost:${{ job.services.redis.ports[6379] }}
         ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
-        cp config/application.yml.example config/application.yml
         gem install bundler --no-ri --no-rdoc
         bundle install --jobs 4 --retry 3
         bin/rails db:prepare
