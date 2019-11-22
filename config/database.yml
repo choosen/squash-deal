@@ -53,7 +53,8 @@ development:
 test:
   <<: *default
   database: squashapp_test
-  url: <%= ENV['DATABASE_URL'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  host: <%= ENV['DATABASE_HOST'] %>
 
 # As with config/secrets.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
