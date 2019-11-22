@@ -11,7 +11,7 @@ jobs:
       postgresql:
         image: postgres:10.1
         ports:
-          - 5432/tcp
+          - 5432
         env:
           POSTGRES_USER: ''
           POSTGRES_PASSWORD: ''
