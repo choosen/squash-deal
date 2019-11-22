@@ -11,11 +11,11 @@ jobs:
       postgresql:
         image: postgres:10.1
         ports:
-          - 5432:5432
+          - 5432/tcp
         env:
           POSTGRES_USER: ''
           POSTGRES_PASSWORD: ''
-          POSTGRES_DB: kandidate_test
+          POSTGRES_DB: squashapp_test
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
       redis:
@@ -42,7 +42,8 @@ jobs:
       env:
         RAILS_ENV: test
         DATABASE_HOST: http://localhost
-        DATABASE_PORT: 5432
+        DATABASE_PORT: ${{ job.services.postgresql.ports[6379] }}
+        DATABASE_URL: http://localhost${{ job.services.postgresql.ports[6379] }}
         REDIS_URL: http://localhost:${{ job.services.redis.ports[6379] }}
         ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
