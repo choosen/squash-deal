@@ -389,7 +389,7 @@ DEPENDENCIES
   web-console
 
 RUBY VERSION
-   ruby 2.6.5p114
+   ruby 2.6.3p100
 
 BUNDLED WITH
    1.17.3
