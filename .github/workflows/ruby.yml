@@ -37,7 +37,7 @@ jobs:
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.6.5
+        ruby-version: 2.6.2
     - name: Build and Create DB and run specs
       env:
         RAILS_ENV: test
@@ -51,4 +51,5 @@ jobs:
         bundle install --jobs 4 --retry 3
         bin/rails db:prepare
         bundle exec rake
-        bundle exec rubocop
+        gem install rubocop
+        rubocop
