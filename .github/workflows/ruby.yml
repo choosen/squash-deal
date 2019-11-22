@@ -48,6 +48,7 @@ jobs:
         ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
       run: |
         sudo apt-get -y install libpq-dev
+        cp config/database.yml.example config/database.yml
         gem install bundler --no-doc
         bundle install --jobs 4 --retry 3
         rake db:create db:schema:load
