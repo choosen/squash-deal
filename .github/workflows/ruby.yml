@@ -1,0 +1,54 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgresql:
+        image: postgres:10.1 
+        ports: 
+          - 5432:5432
+        env:
+          POSTGRES_USER: ''
+          POSTGRES_PASSWORD: ''
+          POSTGRES_DB: kandidate_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+
+      elasticsearch:
+        image: elasticsearch:6.5.4
+        ports: 
+          - 9200/tcp
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.5
+    - name: Build and Create DB and run specs
+      env:
+        RAILS_ENV: test
+        DATABASE_HOST: http://localhost
+        DATABASE_PORT: 5432
+        REDIS_URL: http://localhost:${{ job.services.redis.ports[6379] }}
+        ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
+      run: |
+        cp config/application.yml.example config/application.yml
+        gem install bundler --no-ri --no-rdoc
+        bundle install --jobs 4 --retry 3
+        bin/rails db:prepare
+        bundle exec rake
+        bundle exec rubocop
