@@ -49,7 +49,7 @@ jobs:
         sudo apt-get -y install libpq-dev
         gem install bundler --no-doc
         bundle install --jobs 4 --retry 3
-        bin/rails db:prepare
+        bin/rails db:setup
         bundle exec rake
         gem install rubocop
         rubocop
