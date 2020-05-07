@@ -1,0 +1,64 @@
+name: Ruby
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    services:
+      postgresql:
+        image: postgres:11.5
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: ''
+          POSTGRES_PASSWORD: ''
+          POSTGRES_DB: squashapp_test
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+      redis:
+        image: redis
+        ports:
+          - 6379/tcp
+
+      elasticsearch:
+        image: elasticsearch:6.5.4
+        ports:
+          - 9200/tcp
+        options: -e="discovery.type=single-node" --health-cmd="curl http://localhost:9200/_cluster/health" --health-interval=10s --health-timeout=5s --health-retries=10
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+      with:
+        fetch-depth: 1
+
+    - name: Set up Ruby 2.6
+      uses: actions/setup-ruby@v1
+      with:
+        ruby-version: 2.6.6
+
+    - name: Install PostgreSQL 11 client required for loading structure.sql
+      run: |
+        sudo apt update
+        sudo bash -c "echo deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main >> /etc/apt/sources.list.d/pgdg.list"
+        wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+        sudo apt-get update
+        sudo apt-get -yqq install libpq-dev postgresql-client-11
+
+    - name: Build and Create DB and run specs
+      env:
+        RAILS_ENV: test
+        DATABASE_HOST: localhost
+        DATABASE_PORT: 5432
+        REDIS_URL: http://localhost:${{ job.services.redis.ports[6379] }}
+        ELASTIC_SEARCH_URL: http://localhost:${{ job.services.elasticsearch.ports[9200] }}
+      run: |
+        cp config/database.yml.example config/database.yml
+        gem install bundler --no-doc
+        bundle install --jobs 4 --retry 3
+        rake db:create db:schema:load
+        bundle exec rake
+        gem install rubocop --no-doc
+        bundle exec rubocop
