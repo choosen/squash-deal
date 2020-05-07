@@ -37,7 +37,7 @@ jobs:
     - name: Set up Ruby 2.6
       uses: actions/setup-ruby@v1
       with:
-        ruby-version: 2.6.3
+        ruby-version: 2.6.6
 
     - name: Install PostgreSQL 11 client required for loading structure.sql
       run: |
